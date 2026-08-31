@@ -1,0 +1,6 @@
+paho-mqtt>=2.1.0
+zigpy>=2.1.0
+bellows>=1.0.0
+pydantic>=2.6
+PyYAML>=6.0
+colorama>=0.4.6

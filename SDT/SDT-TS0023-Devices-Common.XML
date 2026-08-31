@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+Copyright Notification
+
+The oneM2M Partners authorize you to copy this document, or any components thereof, provided that you retain all copyright and other proprietary notices contained in the original materials on any copies of the materials and that you comply strictly with these terms.
+This copyright permission does not constitute an endorsement of the products or services, nor does it encompass the granting of any patent rights. The oneM2M Partners assume no responsibility for errors or omissions in this document.
+
+(c) 2021, oneM2M Partners Type 1 (ARIB, ATIS, CCSA, ETSI, TIA, TSDSI, TTA, TTC). All rights reserved.
+
+Notice of Disclaimer & Limitation of Liability
+
+The information provided in this document is directed solely to professionals who have the appropriate degree of experience to understand and interpret its contents in accordance with generally accepted engineering or other professional standards and applicable regulations.
+No recommendation as to products or vendors is made or should be implied.
+ 
+NO REPRESENTATION OR WARRANTY IS MADE THAT THE INFORMATION IS TECHNICALLY ACCURATE OR SUFFICIENT OR CONFORMS TO ANY STATUTE, GOVERNMENTAL RULE OR REGULATION, AND FURTHER, NO REPRESENTATION OR WARRANTY IS MADE OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR AGAINST INFRINGEMENT OF INTELLECTUAL PROPERTY RIGHTS. NO oneM2M PARTNER TYPE 1 SHALL BE LIABLE, BEYOND THE AMOUNT OF ANY SUM RECEIVED IN PAYMENT BY THAT PARTNER FOR THIS DOCUMENT, WITH RESPECT TO ANY CLAIM, AND IN NO EVENT SHALL oneM2M BE LIABLE FOR LOST PROFITS OR OTHER INCIDENTAL OR CONSEQUENTIAL DAMAGES.  oneM2M EXPRESSLY ADVISES ANY AND ALL USE OF OR RELIANCE UPON THIS INFORMATION PROVIDED IN THIS DOCUMENT IS AT THE RISK OF THE USER.
+-->
+
+<Domain xmlns="http://www.onem2m.org/xml/sdt/4.0"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	id="org.onem2m.common.device">
+	
+	<Imports>
+		<xi:include href="./SDT-TS0023-ModuleClasses-Common.xml" parse="xml" />
+	</Imports>
+	
+	<DeviceClasses>
+		<DeviceClass id="device3DPrinter">
+			<Doc>A 3D printer is a smart home appliance to provide 3D printing capabilities.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="faultDetection" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="faultDetection"/>
+				</ModuleClass>
+				<ModuleClass name="threeDPrinter" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="threeDPrinter"/>
+				</ModuleClass>
+				<ModuleClass name="runState" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="temperature" minOccurs="1" maxOccurs="1">
+					<Doc>This value of “currentTemperature” in this module instance represents the temperature of the nozzle. This value SHALL be a float number in a range from 0,0 to 1 000,0.</Doc>
+					<Extend domain="org.onem2m.common.moduleclass" entity="temperature"/>
+				</ModuleClass>
+				<ModuleClass name="printQueue" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="printQueue"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceAirQualityMonitor">
+			<Doc>An air quality monitor is an environmental monitoring device used to monitor the air quality.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="airQualitySensor" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="airQualitySensor"/>
+				</ModuleClass>
+				<ModuleClass name="battery" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="battery"/>
+				</ModuleClass>
+				<ModuleClass name="connectivity" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="connectivity"/>
+				</ModuleClass>
+				<ModuleClass name="periodicalReportConfig" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="periodicalReportConfig"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceAudioReceiver">
+			<Doc>An audio receiver is a device that receives audio signals from a number of sources, processing them to drive speakers.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="audioVolume" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="audioVolume"/>
+				</ModuleClass>
+				<ModuleClass name="mediaInput" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="mediaSelect"/>
+				</ModuleClass>
+				<ModuleClass name="mediaOutput" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="mediaSelect"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceCamera">
+			<Doc>A camera is an optical instrument for recording or capturing images, which may be stored locally or transmitted to another locations.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="sessionDescription" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="sessionDescription"/>
+				</ModuleClass>
+				<ModuleClass name="playerControl" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="playerControl"/>
+				</ModuleClass>
+				<ModuleClass name="motionSensor" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="motionSensor"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceDoor">
+			<Doc>A deviceDoor is a device that is used to open and close a door.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="openLevel" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="openLevel"/>
+				</ModuleClass>
+				<ModuleClass name="doorLock" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="lock"/>
+				</ModuleClass>
+				<ModuleClass name="doorStatus" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="doorStatus"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceDoorLock">
+			<Doc>A door lock is a device that can be used to lock, for example, a door.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="doorLock" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="lock"/>
+				</ModuleClass>
+				<ModuleClass name="doorStatus" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="doorStatus"/>
+				</ModuleClass>
+				<ModuleClass name="battery" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="battery"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceGenericSensor">
+			<Doc>A device that is composed of one or more basic sensors. This generic model is proposed to represent very simple appliances that feature one or more sensing behaviours (mono/multi sensors).</Doc>
+			<ModuleClasses>
+				<ModuleClass name="temperatureAlarm" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="temperatureAlarm"/>
+				</ModuleClass>
+				<ModuleClass name="acousticSensor" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="acousticSensor"/>
+				</ModuleClass>
+				<ModuleClass name="impactSensor" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="impactSensor"/>
+				</ModuleClass>
+				<ModuleClass name="motionSensor" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="motionSensor"/>
+				</ModuleClass>
+				<ModuleClass name="smokeSensor" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="smokeSensor"/>
+				</ModuleClass>
+				<ModuleClass name="uvSensor" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="uvSensor"/>
+				</ModuleClass>
+				<ModuleClass name="waterSensor" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="waterSensor"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceLight">
+			<Doc>A light is a device that is used to control the state of an illumination appliance.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="faultDetection" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="faultDetection"/>
+				</ModuleClass>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="runState" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="colour" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="colour"/>
+				</ModuleClass>
+				<ModuleClass name="colourSaturation" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="colourSaturation"/>
+				</ModuleClass>
+				<ModuleClass name="brightness" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="brightness"/>
+				</ModuleClass>
+				<ModuleClass name="timer" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="timer"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceMultiFunctionPrinter">
+			<Doc>A Multi Function Printer (MFP) is an office machine which incorporates the functionality of multiple devices in one, so as to have a smaller footprint in home or office. A typical MFP may act as a combination of printer, scanner and more. This MFP information model provides capabilities to control and monitor MFP specific functions and resources.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="printerRunState" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="scannerRunState" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="autoDocumentFeeder" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="autoDocumentFeeder"/>
+				</ModuleClass>
+				<ModuleClass name="printQueue" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="printQueue"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="devicePrinter">
+			<Doc>A printer is a device that is used to monitor or control the state of a printing appliance.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="runState" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="printQueue" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="printQueue"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceScanner">
+			<Doc>A scanner is a device that optically scans images, printed text, handwriting or an object, and converts it to a digital image.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="runState" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="autoDocumentFeeder" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="autoDocumentFeeder"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceServiceButton">
+			<Doc>A service button is a device that initiates and controls technical or business processes, such as ordering consumer and industrial goods over the Internet. It may support optional ModuleClasses to present information to a user, such as presenting textual and graphical information.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="pushButton" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="pushButton"/>
+				</ModuleClass>
+				<ModuleClass name="connectivity" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="connectivity"/>
+				</ModuleClass>
+				<ModuleClass name="operationMode" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="operationMode"/>
+				</ModuleClass>
+				<ModuleClass name="battery" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="battery"/>
+				</ModuleClass>
+				<ModuleClass name="textMessage" minOccurs="0" maxOccurs="1">
+					<Doc>This ModuleClass may be used to present textual information to a user.</Doc>
+					<Extend domain="org.onem2m.common.moduleclass" entity="textMessage"/>
+				</ModuleClass>
+				<ModuleClass name="image" minOccurs="0" maxOccurs="1">
+					<Doc>This ModuleClass may be used to present graphical information to a user.</Doc>
+					<Extend domain="org.onem2m.common.moduleclass" entity="binaryObject"/>
+				</ModuleClass>
+				<ModuleClass name="credentials" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="credentials"/>
+				</ModuleClass>
+				<ModuleClass name="geoLocation" minOccurs="0" maxOccurs="1">
+					<Doc>This ModuleClass may be used to detect and report the geo-location of a deviceServiceButton device.</Doc>
+					<Extend domain="org.onem2m.common.moduleclass" entity="geoLocation"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceSmartPlug">
+			<Doc>A smart plug is a device that can turn on and off a connected appliance.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="faultDetection" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="faultDetection"/>
+				</ModuleClass>
+				<ModuleClass name="remoteControlEnable" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="remoteControlEnable"/>
+				</ModuleClass>
+			</ModuleClasses>
+			<SubDevices>
+				<SubDevice id="powerOutlet" minOccurs="1" maxOccurs="unbound">
+					<Extend domain="org.onem2m.common.subdevice" entity="subDevicePowerOutlet"/>
+				</SubDevice>
+			</SubDevices>
+		</DeviceClass>
+		<DeviceClass id="deviceSwitch">
+			<Doc>A switch is a device that is used to control and monitor the state of power.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceThermometer">
+			<Doc>A thermometer is a device that can be used to check, for example, the body or other temperatures.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="temperature" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="temperature"/>
+				</ModuleClass>
+				<ModuleClass name="battery" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="battery"/>
+				</ModuleClass>
+				<ModuleClass name="temperatureAlarm" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="temperatureAlarm"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceThermostat">
+			<Doc>A thermostat is used to control the ambient temperature of rooms within, for example, a house. This information model provides capabilities to interact with specific functions of thermostats.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="runState" minOccurs="0" maxOccurs="1">
+					<Doc>The possible values of the “supportedModes” datapoint for the thermostat device are included in clause 5.6.18.</Doc>
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="timer" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="timer"/>
+				</ModuleClass>
+				<ModuleClass name="temperature" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="temperature"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="deviceWaterValve">
+			<Doc>A water valve is a device that is used to turn the water supply ON or OFF remotely.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="openLevel" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="openLevel"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="device3DDisplay">
+			<Doc>A 3D display is a device to display 3D contents such as 3D character or holographic image.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="clock" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="clock"/>
+				</ModuleClass>
+				<ModuleClass name="audioVolume" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="audioVolume"/>
+				</ModuleClass>
+				<ModuleClass name="threeDDisplay" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="threeDDisplay"/>
+				</ModuleClass>
+				<ModuleClass name="connectivity" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="connectivity"/>
+				</ModuleClass>
+				<ModuleClass name="machineState" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="lock" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="lock"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+		<DeviceClass id="device3DScanner">
+			<Doc>A 3D scanner is a device to scan 3D objects such as a statue of a character.</Doc>
+			<ModuleClasses>
+				<ModuleClass name="binarySwitch" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="binarySwitch"/>
+				</ModuleClass>
+				<ModuleClass name="clock" minOccurs="0" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="clock"/>
+				</ModuleClass>
+				<ModuleClass name="threeDScanState" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="runState"/>
+				</ModuleClass>
+				<ModuleClass name="threeDScanner" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="threeDScanner"/>
+				</ModuleClass>
+				<ModuleClass name="connectivity" minOccurs="1" maxOccurs="1">
+					<Extend domain="org.onem2m.common.moduleclass" entity="connectivity"/>
+				</ModuleClass>
+			</ModuleClasses>
+		</DeviceClass>
+	</DeviceClasses>
+</Domain>

@@ -1,0 +1,68 @@
+# =============================================================
+# IPE Gateway Configuration
+# Zigbee Serial <-> oneM2M MQTT Mca Interworking Proxy Entity
+# =============================================================
+
+onem2m:
+  cse_base: "TinyIoT"                # CSEBase resource name (rn) -- used in structured resource
+                                      # paths (to=/fr= payload fields, e.g. "TinyIoT/AE_x/..."). Must
+                                      # match exactly, case included: confirmed against TinyIoT's own
+                                      # MQTT debug log, which stored "TinyIoT/AE_Aqara_IPE/cnt_control".
+  cse_id: "tinyiot"                  # CSE-ID -- the CSE's own identity, distinct from cse_base above.
+                                      # Used as the MQTT topic receiver segment and as the default `fr`
+                                      # when the CSE itself is the originator (e.g. a Notify). On this
+                                      # TinyIoT instance this is lowercase while cse_base is not --
+                                      # they are two different identifiers per TS-0010/TS-0001, not
+                                      # guaranteed to share casing (or even the same string).
+  ae_name: "AE_Aqara_IPE"            # AE resource name (rn) -- NOT the originator; the CSE assigns
+                                      # our actual AE-ID (aei) at registration time (see translator.py
+                                      # Translator._ensure_ae()), used as originator from then on.
+  app_id: "NAqaraIPE"                # App-ID (oneM2M format: "N" + string for non-registered App-IDs)
+  origin: "CAdmin"                   # Originator used only for ACP bootstrap (AE registration uses fr="")
+  acp_name: "acp_ipe_policy"
+  control_rn: "cnt_control"          # plain Container; client apps request control actions (e.g. permitJoin) by CREATE-ing a CIN here
+  # Originators allowed to access resources created by this IPE.
+  # NOTE: the AE's real originator is now CSE-assigned at runtime (not a
+  # static name), so it can't be listed here in advance -- ACP access for
+  # the AE itself currently relies on the CSE's implicit creator/self
+  # privileges rather than this list. Revisit if the CSE denies AE-created
+  # resources.
+  allowed_originators:
+    - "CAdmin"
+  request_timeout_sec: 10.0
+
+mqtt:
+  broker_host: "192.168.235.138"
+  broker_port: 1883
+  client_id: "ipe_aqara_gateway_001"  # Fixed client id (required for clean_session=False)
+  keepalive: 60
+  clean_session: false
+  username: null
+  password: null
+  # Fail-fast: if the broker connection cannot be established, the process exits.
+  connect_timeout_sec: 10.0
+  connect_retry: 0                    # 0 = no retry, fail immediately
+  downlink_queue_maxsize: 500          # raw MQTT text messages awaiting Translator.run_downlink_consumer()
+
+serial:
+  # Set use_tcp=true to talk to a ZBT-2 LAN converter instead of a local COM port.
+  use_tcp: false
+  port: "COM4"
+  baudrate: 115200
+  timeout: 1.0
+  tcp_host: "192.168.1.50"
+  tcp_port: 6638
+  reconnect_delay_sec: 5.0
+  uplink_queue_maxsize: 500            # raw ZCL frames awaiting Translator.run_uplink_consumer()
+  database_path: "zigpy.db"            # zigpy's own network/device state persistence (NVM backup)
+  flow_control: null                   # null(none)/"hardware"/"software" -- confirmed null on Sonoff ZBDongle-E
+
+pairing:
+  permit_join_duration_sec: 60         # how long the coordinator stays open for new joins
+  zcl_response_timeout_sec: 5.0        # how long to wait for any single ZCL send+response round trip
+
+healthcheck:
+  interval_sec: 60                     # how often the offline-sweep runs
+  offline_threshold_sec: 600           # no uplink report for 10 min -> mark offline (device still paired)
+
+log_level: "DEBUG"

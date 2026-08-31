@@ -1,0 +1,3972 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+Copyright Notification
+
+The oneM2M Partners authorize you to copy this document, or any components thereof, provided that you retain all copyright and other proprietary notices contained in the original materials on any copies of the materials and that you comply strictly with these terms.
+This copyright permission does not constitute an endorsement of the products or services, nor does it encompass the granting of any patent rights. The oneM2M Partners assume no responsibility for errors or omissions in this document.
+
+(c) 2021, oneM2M Partners Type 1 (ARIB, ATIS, CCSA, ETSI, TIA, TSDSI, TTA, TTC). All rights reserved.
+
+Notice of Disclaimer & Limitation of Liability
+
+The information provided in this document is directed solely to professionals who have the appropriate degree of experience to understand and interpret its contents in accordance with generally accepted engineering or other professional standards and applicable regulations.
+No recommendation as to products or vendors is made or should be implied.
+ 
+NO REPRESENTATION OR WARRANTY IS MADE THAT THE INFORMATION IS TECHNICALLY ACCURATE OR SUFFICIENT OR CONFORMS TO ANY STATUTE, GOVERNMENTAL RULE OR REGULATION, AND FURTHER, NO REPRESENTATION OR WARRANTY IS MADE OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR AGAINST INFRINGEMENT OF INTELLECTUAL PROPERTY RIGHTS. NO oneM2M PARTNER TYPE 1 SHALL BE LIABLE, BEYOND THE AMOUNT OF ANY SUM RECEIVED IN PAYMENT BY THAT PARTNER FOR THIS DOCUMENT, WITH RESPECT TO ANY CLAIM, AND IN NO EVENT SHALL oneM2M BE LIABLE FOR LOST PROFITS OR OTHER INCIDENTAL OR CONSEQUENTIAL DAMAGES.  oneM2M EXPRESSLY ADVISES ANY AND ALL USE OF OR RELIANCE UPON THIS INFORMATION PROVIDED IN THIS DOCUMENT IS AT THE RISK OF THE USER.
+ -->
+
+<Domain xmlns="http://www.onem2m.org/xml/sdt/4.0"
+	xmlns:xi="http://www.w3.org/2001/XInclude"
+	id="org.onem2m.common.moduleclass">
+	
+	<Imports>
+		<xi:include href="./SDT-TS0023-DataTypes-Horizontal.xml" parse="xml" />
+	</Imports>
+
+	<ModuleClasses>
+		<ModuleClass name="threeDDisplay">
+			<Doc>This ModuleClass provides capabilities to give the information of a 3D display.</Doc>
+			<Data>
+				<DataPoint name="threeDDisplayType" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The type of 3D display technology (see clause 5.6.52)</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enum3DDisplayType" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="threeDDisplayViewAngle" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates viewing angle of the 3D display (1..360)</Doc>
+					<DataType unitOfMeasure="degree">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="threeDDisplayResolutionX" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates resolution of X-axis of the 3D display.</Doc>
+					<DataType unitOfMeasure="px">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="threeDDisplayResolutionY" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates resolution of Y-axis of the 3D display.</Doc>
+					<DataType unitOfMeasure="px">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="threeDGlasses" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates the 3D display uses 3D glasses (TRUE) or not.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="threeDPrinter">
+			<Doc>This ModuleClass provides capabilities for a 3D printer.</Doc>
+			<Actions>
+				<Action name="start3Dprint" optional="true">
+					<Doc>Start 3D printing.</Doc>
+				</Action>
+				<Action name="stop3Dprint" optional="true">
+					<Doc>Stop 3D printing.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="printType" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The type of printing technology.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enum3DPrinterTechnology" />
+ 					</DataType>
+				</DataPoint>
+				<DataPoint name="printSizeX" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point represents the maximum size of a printing object in the direction of X-axis.</Doc>
+					<DataType unitOfMeasure="mm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="printSizeY" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point represents the maximum size of printing object in the direction of Y-axis.</Doc>
+					<DataType unitOfMeasure="mm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="printSizeZ" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point represents the maximum size of printing object in the direction of Z-axis.</Doc>
+					<DataType unitOfMeasure="mm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="network" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This value indicates the Wide Area Network (WAN) connectivity of the 3D printer, such as Internet or GSM. "False" indicates that the printer does not have network connectivity to a WAN. "True" indicates that the printer has WAN network connectivity.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="memorySize" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This value represents the total memory size of the printer.</Doc>
+					<DataType unitOfMeasure="MB">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="threeDScanner">
+			<Doc>This ModuleClass provides the capability to scanning 3D object for the user.</Doc>
+			<Data>
+				<DataPoint name="threeDScannerType" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates type of the 3D scanner</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enum3DScannerType" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="threeDScanResolution" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates the scanning resolution.</Doc>
+					<DataType unitOfMeasure="dpi">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxSizeX" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates the maximum horizontal size of the scanning.</Doc>
+					<DataType unitOfMeasure="cm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxSizeY" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates the maximum vertical size of the scanning.</Doc>
+					<DataType unitOfMeasure="cm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxSizeZ" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates the maximum depth of the scanning.</Doc>
+					<DataType unitOfMeasure="cm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="acousticSensor">
+			<Doc>This ModuleClass provides capabilities for an acoustic sensor.</Doc>
+			<Data>
+				<DataPoint name="loudness" readable="true" writable="false" eventable="true" optional="false">
+					<Doc></Doc>
+					<DataType unitOfMeasure="dB">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="acousticStatus" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The acousticStatus is expressed in percent, whereas a value of 0 means "no sound" and a value of 100 means "most noisy".</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="airConJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of an air conditioner.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumAirConJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Name of the current job mode as a string. This can be used when currentJobMode is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumAirConJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="airFlow">
+			<Doc>This ModuleClass provides capabilities for controlling the air flow of a device.</Doc>
+			<Data>
+				<DataPoint name="speed" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current speed level in the range of the [minSpeed, maxSpeed] data points.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="minSpeed" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The minimum value for the speed level. If not present, the default is 0.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxSpeed" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The maximum value for the speed level. If not present, the default is 100.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="verticalDirection" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The vertical direction of the air flow.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumVerticalDirection" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="supportedVerticalDirection" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>List of supported vertical directions.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumVerticalDirection" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="horizontalDirection" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The horizontal direction of the air flow.</Doc>
+						<DataType>
+							<Extend domain="org.onem2m.horizontal" entity="enumHorizontalDirection" />
+						</DataType>
+				</DataPoint>
+				<DataPoint name="supportedHorizontalDirection" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>List of supported horizontal directions.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumHorizontalDirection" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="automode" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Status of the automode feature. "True" indicates that the speed is set by the device, "False" indicates that the device is not controlling the speed.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="airPurifierJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of an airPurifier.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumAirPurifierJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Name of the current job mode as a string. This can be used when currentJobMode is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumAirPurifierJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="airQualitySensor">
+			<Doc>This ModuleClass provides capabilities for a monitoring sensor that measures the air quality.</Doc>
+			<Data>
+				<DataPoint name="monitoringEnabled" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The current status of monitoring. "True" indicates enabled, and "False" indicates not enabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="pm1" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The concentration of particle matter under 1um. The minimum value is 0, and the maximum value is 1000.</Doc>
+					<DataType unitOfMeasure="ug/m^3">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="pm25" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The concentration of particle matter under 2,5um. The minimum value is 0, and the maximum value is 1000.</Doc>
+					<DataType unitOfMeasure="ug/m^3">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="pm10" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The concentration of particle matter under 10um. The minimum value is 0, and the maximum value is 1000.</Doc>
+					<DataType unitOfMeasure="ug/m^3">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="tsp" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Total suspended particles.</Doc>
+					<DataType unitOfMeasure="ug/m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="odor" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The concentration of odor that reflects air pollution. The minimum value is 0.</Doc>
+					<DataType unitOfMeasure="OU/m^3">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="humidity" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measured humidity. The minimum value is 0, and the maximum value is 100.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="temperature" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The current temperature.</Doc>
+					<DataType unitOfMeasure="°C">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="airPressure" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The current temperature.</Doc>
+					<DataType unitOfMeasure="KPa">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="co" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the CO level.</Doc>
+					<DataType unitOfMeasure="mg/m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="co2" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the CO2 level.</Doc>
+					<DataType unitOfMeasure="mg/m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="ch2o" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the CH2O level.</Doc>
+					<DataType unitOfMeasure="ug/m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="voc" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the VOC (Volatile Organic Compounds).</Doc>
+					<DataType unitOfMeasure="ppm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="no2" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the concentration of NO2.</Doc>
+					<DataType unitOfMeasure="ug/m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="so2" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the concentration of SO2.</Doc>
+					<DataType unitOfMeasure="ug/m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="o3" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the concentration of O3.</Doc>
+					<DataType unitOfMeasure="ug/m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="noise" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the level of noise.</Doc>
+					<DataType unitOfMeasure="dB">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="windDirection" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The wind direction. The value range is [0-359]. North is 0,0 degrees, east is 90,0 degrees, south is 180.0 degrees, west is 270.0 degrees.</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="windSpeed" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The wind speed.</Doc>
+					<DataType unitOfMeasure="m/s">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="alarmSpeaker">
+			<Doc>This ModuleClass provides the capabilities to initiate and monitor an alarm.</Doc>
+			<Data>
+				<DataPoint name="tone" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Representing the tones of the alarm.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumTone" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="light" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Representing the lighting mode of the alarm.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumAlertColourCode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="alarmStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>"True" indicates the alarm start while "False" indicates the alarm stop.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="anemometer">
+			<Doc>This ModuleClass provides the capabilities to indicate the measure of the wind speed.</Doc>
+			<Data>
+				<DataPoint name="windSpeed" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The speed of the wind.</Doc>
+					<DataType unitOfMeasure="km/h">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="audioVolume">
+			<Doc>This ModuleClass provides capabilities to control and monitor volume.</Doc>
+			<Actions>
+				<Action name="upVolume" optional="true">
+					<Doc>Increase volume by the amount of the stepValue up to the maxValue.</Doc>
+				</Action>
+				<Action name="downVolume" optional="true">
+					<Doc>Decrease volume by the amount of the stepValue down to 0.</Doc>
+				</Action>
+				<Action name="muteAudioVolume" optional="true">
+					<Doc>Save the current audio volume and set the volume to 0.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="volumeValue" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current volume in the range of [0, maxValue]. 0 shall mean no sound produced.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="stepValue" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Step value used by the "UpVolume" and "DownVolume" actions.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxValue" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Maximum value allowed for Volume. maxValue is 100 by default if "maxValue" is not provided.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="muteEnabled" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The current status of the mute enablement. "True" indicates enabled (that is, no sound), and "False" indicates not enabled (that is, sound is played).</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="saveAudioVolume" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Save the current audio volume for the muteAudioVolume.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="autoDocumentFeeder">
+			<Doc>This ModuleClasses provides capabilities to monitor the state of autoDocumentFeeder (ADF). ADF is a feature which takes several pages and feeds the paper one page at a time into a scanner or printer, allowing the user to scan, print or fax, multiple-page documents without having to manually replace each page.</Doc>
+			<Data>
+				<DataPoint name="currentAdfState" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Current state of the ADF.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumAdfState" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="adfStates" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible ADF states that are supported by the device.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumAdfState" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="barometer">
+			<Doc>This ModuleClass provides the capabilities to measure the atmospheric pressure and indicate the detection of abnormal pressure, and raise an alarm if a triggering criterion is met.</Doc>
+			<Data>
+				<DataPoint name="alarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point indicates the status of detection of an abnormal pressure. “True” indicates an abnormal pressure, “False” indicates a normal pressure.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="atmosphericPressure" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>To report the value of the atmospheric pressure.</Doc>
+					<DataType unitOfMeasure="hPa">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="minPressureThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The min threshold to trigger the alarm.</Doc>
+					<DataType unitOfMeasure="hPa">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxPressureThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The max threshold to trigger the alarm.</Doc>
+					<DataType unitOfMeasure="hPa">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="battery">
+			<Doc>This ModuleClass provides capabilities to indicate the detection of low battery and gives an alarm if triggering criterion is met. The level data point in the module represents the current battery charge level.</Doc>
+			<Data>
+				<DataPoint name="level" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>TThe rounded percentage of the current charging level of a battery in the range of [0, 100]. 0 percentage shall mean that no charge remains.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="capacity" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The total capacity of a battery in mAh.</Doc>
+					<DataType unitOfMeasure="mAh">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="rechargeable" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>To indicate the battery is rechargeable or not. "True" indicates rechargeable.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="charging" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The status of charging. "True" indicates charging, and "False" indicates not charging.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="discharging" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The status of discharging. "True" indicates discharging, and "False" indicates not discharging.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowBattery" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>To indicate that the battery is in a low charge level.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="batteryThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>When a battery's "level" is less than "batteryThreshold" then the "lowBattery" is "true". This datapoint can be used to raise an alarm, depending on the implementation.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="chargingVoltage" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The voltage to charge the battery</Doc>
+					<DataType unitOfMeasure="V">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="chargingAmpere" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The ampere to charge the battery</Doc>
+					<DataType unitOfMeasure="A">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="dischargingVoltage" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The voltage to discharge the battery</Doc>
+					<DataType unitOfMeasure="V">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="dischargingAmpere" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The ampere to discharge the battery</Doc>
+					<DataType unitOfMeasure="A">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="batteryMaterial" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The material of the cell of the battery</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumBatteryMaterial" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="batteryShape" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The size of the battery such as "AAA".</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumBatteryShape" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="billDeposit">
+			<Doc>This ModuleClass provides the capability to deposit bills, indicates the balance of the deposited bills and detects fake.</Doc>
+			<Data>
+				<DataPoint name="depositStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the deposit is made successfully or not.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="balance" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the balance of the deposited bills.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="count" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The data point indicates the number of bills which are deposited. [1..N].</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currency" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The currency is depended on the country which the deposited bills are used. For example, the currency could be "Dollar" in US, "Euro" in EU and "Won" in Korea.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="fakeStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates that the deposited bills are fake notes.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="billWithdrawal">
+			<Doc>This ModuleClass provides the capability to withdraw bills which are deposited by the billDepositModule.</Doc>
+			<Data>
+				<DataPoint name="withdrawalStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the withdrawal is made successfully or not.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="balance" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the balance of the withdrawn bills.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="count" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The data point indicates the number of bills which are withdrawn. [1..N].</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="binaryObject">
+			<Doc>This ModuleClass describes the handling of a binary object (blob).</Doc>
+			<Data>
+				<DataPoint name="object" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>This data point contains the base64 encoded binary object.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="objectType" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>This data point contains the type and subtype of the binary object as a MIME type.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="size" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The size of the decoded binary object.</Doc>
+					<DataType unitOfMeasure="bytes">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="hash" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The hash code of the blob. If present, it is used to check the decoded content of the "object" data point for integrity. The algorithm used for generating the hash value is SHA-2. The data point contains the hash as a hex encoded value.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="binarySwitch">
+			<Doc>This ModuleClass provides capabilities to control and monitor the state of power.</Doc>
+			<Actions>
+				<Action name="toggle" optional="true">
+					<Doc>Toggle the switch.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="state" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current status of the binarySwitch. "True" indicates turned-on, and "False" indicates turned-off.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="bioElectricalImpedanceAnalysis">
+			<Doc>This ModuleClass provides the analysis of human body tissue based on impedance measurement.</Doc>
+			<Data>
+				<DataPoint name="water" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The water content measurement from the BIA.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="fat" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The fat content measurement from the BIA.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="muscle" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The muscle content measurement from the BIA.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="bone" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The bone content measurement from the BIA.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="visceraFat" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The viscera fat content measurement from the BIA.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="kcal" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The kcal (kilocalories) measurement from the BIA.</Doc>
+					<DataType unitOfMeasure="kcal">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="resistance" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The resistance measurement of a human body.</Doc>
+					<DataType unitOfMeasure="ohm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="blender">
+			<Doc>This ModuleClass is for controlling a blender, for example in a juicer.</Doc>
+			<Data>
+				<DataPoint name="useBlender" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current status of the blender enablement. "True" indicates enabled, and "False" indicates disabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="spinSpeed" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Choose the right spin speed according to the hardness of the object (eg.fruits and vegetables).</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumSpinLevelStrength" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="bodyCompositionAnalyser">
+			<Doc>This ModuleClass provides the capability to report the measurement of a body composition analyser.</Doc>
+			<Data>
+				<DataPoint name="bodyLength" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of body length by Weight scale and Body composition analyser.</Doc>
+					<DataType unitOfMeasure="cm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="bmi" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of Body Mass Index (BMI) by a weight scale and a body composition analyser.</Doc>
+					<DataType unitOfMeasure="kg/m^2">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="fatFreeMass" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of fat free mass by a Weight scale and a Body composition analyser.</Doc>
+					<DataType unitOfMeasure="kg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="softLeanMass" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of soft lean mass by a weight scale and a body composition analyser.</Doc>
+					<DataType unitOfMeasure="kg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="muscleMass" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of muscle mass by a weight scale and a body composition analyser.</Doc>
+					<DataType unitOfMeasure="kg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="basalMetabolism" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of muscle mass by a weight scale and a body composition analyser.</Doc>
+					<DataType unitOfMeasure="kcal">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="impedance" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of impedance by a weight scale and a body composition analyser.</Doc>
+					<DataType unitOfMeasure="ohm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="mass" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of mass by a weight scale and a body composition analyser.</Doc>
+					<DataType unitOfMeasure="kg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="bodyWaterMass" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of body water mass by a weight scale and a body composition analyser. </Doc>
+					<DataType unitOfMeasure="kg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="inorganicSaltMass" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of inorganic salt mass by a weight scale and a body composition analyser.</Doc>
+					<DataType unitOfMeasure="g">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="somatotype" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of somatotype by Weight scale and Body composition analyser.</Doc>
+					<DataType unitOfMeasure="g">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="boiler">
+			<Doc>This ModuleClass provides the capabilities to control the status of the boiling functionality for water heaters.</Doc>
+			<Data>
+				<DataPoint name="status" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The status of boiling. "True" indicates boiling, "False" indicates not boiling.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="brewing">
+			<Doc>This ModuleClass provides capabilities to control and monitor a brewing process. It is intended to be part of devices that prepare hot drinks such as a coffee or a tea.</Doc>
+			<Data>
+				<DataPoint name="cupsNumber" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current number of the cups requested to brew.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="strength" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The current strength of the drink taste. A higher value indicates a stronger taste.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumTasteStrength" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="brightness">
+			<Doc>This ModuleClass provides capabilities to control and monitor the brightness of a light for example from a lamp. Brightness is scaled as a percentage. A lamp or a monitor can be adjusted to a level of light between very dim (0 % is the minimum brightness) and very bright (100 % is the maximum brightness).</Doc>
+			<Data>
+				<DataPoint name="brightness" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The status of brightness level.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="cardScanner">
+			<Doc>This ModuleClass provides the capability to scan an image of a card, gets the card information from the image and provides the information.</Doc>
+			<Data>
+				<DataPoint name="scanStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the scanning process is successful.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cardInfo" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The card information is a string value.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="cashDispenser">
+			<Doc>This ModuleClass provides the capability to withdraw designated amount of cash or returns all the deposited bills and coins by the billDepositModule and coinDepositModule.</Doc>
+			<Data>
+				<DataPoint name="dispenseStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the dispense is successful or not.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="balance" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the balance of the dispensed bills and coins.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="count" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The data point indicates the number of bills and coins which are dispensed.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currency" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The currency is depended on the country that the dispensed bills and coins are used. For example, the unit could be "Dollar" in US, "Euro" in EU and "Won" in Korea.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="clock">
+			<Doc>This ModuleClass provides capabilities to control and monitor time and date information.</Doc>
+			<Data>
+				<DataPoint name="currentTime" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Information of the current time.</Doc>
+					<DataType>
+						<Simple type="time" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentDate" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Information of the current date.</Doc>
+					<DataType>
+						<Simple type="date" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentTimeZone" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Name of current time zone according to the IANA Timezone data format (TZ), for example, "America/New York".</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="clothesDryerJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of a clothes dryer.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumClothesDryerJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Name of current job mode as a string. This can be used when "currentJobMode" is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumClothesDryerJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="clothesWasherDryerJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of clothesWasherDryer.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumClothesWasherDryerJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The name of the current job mode as a string. This can be used when currentJobMode is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states that the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumClothesWasherDryerJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="clothesWasherJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job mode of a washer.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumClothesWasherJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The name of the current job mode as a string. This can be used when the currentJobMode is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states that the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumClothesWasherJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="clothesWasherJobModeOption">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the washing job mode options of a washer.</Doc>
+			<Data>
+				<DataPoint name="washTemp" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>This data point represents the water temperature level.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumGeneralTemperature" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="soilLevel" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>This data point represents the washing level.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumGeneralLevel" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="spinSpeed" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>This data point represents the spin-dry speed level.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumGeneralSpeed" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="preWash" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>This data point indicates pre-wash. "True" indicates enabled, "False" indicates disabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="speedWash" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>This data point indicates speed wash. "True" indicates enabled, "False" indicates disabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="steamTreat" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>This data point indicates steam treat. "True" indicates enabled, "False" indicates disabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="coldWash" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>This data point indicates cold wash. "True" indicates enabled, "False" indicates disabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="extraRinse" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>This data point indicates extra rinse. "True" indicates enabled, "False" indicates disabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="coinDeposit">
+			<Doc>This ModuleClass provides the capability to deposit coins, indicates the balance of the deposited coins and detects fake.</Doc>
+			<Data>
+				<DataPoint name="depositStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>TThis data point indicates the deposit is made successfully or not.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="balance" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the balance of the deposited coins.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="count" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The data point indicates the number of coins which are deposited.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currency" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The currency is depended on the country that the deposited coins are used.	For example, the unit could be "Dollar" in US, "Euro" in EU and "Won" in Korea.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="fakeStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates that the deposited coins are fake.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="colour">
+			<Doc>This ModuleClass provides the capabilities to set the value of the Red, Green, and Blue colour channels for a colour device.</Doc>
+			<Data>
+				<DataPoint name="red" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The value of the Red colour channel of RGB. The range is [0,255].</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="green" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The value of the Green colour channel of RGB. The range is [0,255].</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="blue" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>TThe value of the Blue colour channel of RGB. The range is [0,255].</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="colourSaturation">
+			<Doc>This ModuleClass provides capabilities to control and monitor a colour saturation value.</Doc>
+			<Data>
+				<DataPoint name="colourSaturation" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The status of colour saturation level. "colourSaturation" has a range of [0,100]. A "colourSaturation" value of 0 means that a device displays or produces black and white images. A "colourSaturation" value of 50 means that a device displays or produces normal colour images. A "colourSaturation" value of 100 means that a device displays or produces very colourful images.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="connectivity">
+			<Doc>This ModuleClass provides capabilities to monitor network connectivity.</Doc>
+			<Data>
+				<DataPoint name="rsrp" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Reference signal received power (RSRP) is a measurement of the received power level in an LTE cell network.</Doc>
+					<DataType unitOfMeasure="dBm">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="rsrq" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Reference signal received quality (RSRQ) indicates the quality of the received reference signal. RSRQ is defined as the ratio NxRSRP/(E-UTRA carrier RSSI), where N is the number of RB's of the E-UTRA carrier RSSI measurement bandwidth. The measurements in the numerator and denominator shall be made over the same set of resource blocks.</Doc>
+					<DataType unitOfMeasure="dB">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cellID" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Serving Cell ID in case Network Bearer Resource is a Cellular Network.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="rssi" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>In telecommunications, received signal strength indicator (RSSI) is a measurement of the power present in a received radio signal.</Doc>
+					<DataType unitOfMeasure="dBm">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="signalECL" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>ased on measurements of the reference signal's received power, the UE will select an entry coverage enhancement level (ECL) to camp into the cell. The coverage level will determine the Narrowband Physical Random Access Channel (NPRACH) resources used by the device and will inform the eNB of the device receiver sensitivity conditions.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="sinr" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Signal to interference plus noise ratio (SINR) is commonly used in wireless communication as a way to measure the quality of wireless connections.</Doc>
+					<DataType unitOfMeasure="dB">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="pci" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Physical Cell ID is an identification of a cell at physical layer.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="dailyActivityTime" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Daily communication time (Starts at 00:00h).</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="dailyNumberOfConnections" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Daily number of connections (Starts at 00:00h).</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="commFreqValue" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Communication frequency value (commFreqValue) is the transmission frequency of the wireless signal.</Doc>
+					<DataType unitOfMeasure="MHz">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentCycleBeginn" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>A timestamp that indicates the beginning of the current cycle for counting the transfer volumina and transmission errors.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentCycleVolume" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Number of bytes transferred since currentCycleBeginn.</Doc>
+					<DataType unitOfMeasure="bytes">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentCycleTransmissionErrors" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Number of transmission errors since currentCycleBeginn.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="minimumCommunicationLatency" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The minimum time delay between the last communication attempt.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="cookerHoodJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of a cookerHood.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumCookerHoodJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The name of the current job mode as a string. This can be used when currentJobMode is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumCookerHoodJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="credentials">
+			<Doc>This ModuleClass provides the capability to manage user credentials which allows a user to authenticate on an appliance or a server that is associated with the appliance. The authentication depends on a user login and password, or on a token. An example appliance which may include this ModuleClass is a camera.</Doc>
+			<Data>
+				<DataPoint name="loginName" readable="false" writable="true" eventable="true" optional="true">
+					<Doc>The user's login name.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="password" readable="false" writable="true" eventable="true" optional="true">
+					<Doc>The user's password.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="token" readable="false" writable="true" eventable="true" optional="true">
+					<Doc>An authentication token, for example an OAuth token.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="crossingBarrier">
+			<Doc>An active barrier is used to block a pedestrian or vehicle from a control point (e.g. entrance and gate).</Doc>
+			<Data>
+				<DataPoint name="barrierDefault" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The value of the barrier default is true, the default status of the barrier is closed and vice versa.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="barrierStatus" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The value of the barrier status is true, the barrier is closed and vice versa.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="timer" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The timer indicates the duration of barrierStatus is changed. This means that barrierStatus is set to the current value of barrierDefault.</Doc>
+					<DataType>
+						<Simple type="time" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="dehumidifierJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of a dehumidifier device.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumDehumidifierJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The name of the current job mode as a string. This can be used when currentJobMode is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumDehumidifierJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="dishWasherJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of a dishWasher.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumDishWasherJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The name of the current job mode as a string. This can be used when the currentJobMode is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumDishWasherJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="disposal">
+			<Doc>This ModuleClass provides capabilities to control the status of the disposing functionality for garbage disposal.</Doc>
+			<Data>
+				<DataPoint name="disposalStatus" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The status of disposal. "True" indicates disposing, "False" indicates not disposing.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="doorStatus">
+			<Doc>This ModuleClass provides the status of a door. It is intended to be part of a device such as a refrigerator and an oven that might have multiple doors.</Doc>
+			<Data>
+				<DataPoint name="doorState" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Current state of the door</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumDoorState" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="openDuration" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The time duration the door has been open.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="openAlarm" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The state of the door open alarm. "True" indicates that the open alarm is active. "False" indicates that the open alarm is not active.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="electricVehicleConnector">
+			<Doc>This ModuleClass provides information about charging/discharging devices for electric vehicles.</Doc>
+			<Data>
+				<DataPoint name="status" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The status of connection. "True" means connected, "False" means not connected.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="chargingCapacity" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Rated charging capacity. The unit of measure is ampere hours.</Doc>
+					<DataType unitOfMeasure="Ah">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="dischargingCapacity" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Rated discharging capacity.</Doc>
+					<DataType unitOfMeasure="Ah">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="energyConsumption">
+			<Doc>This ModuleClass describes the measured energy consumed by the device since power up. One particular use case for the energyConsumption ModuleClass is a smart meter.</Doc>
+			<Data>
+				<DataPoint name="power" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The power of the device.</Doc>
+					<DataType unitOfMeasure="W">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="absoluteEnergyConsumption" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The absolute energy consumption, reflecting the real measurement of accumulative energy.</Doc>
+					<DataType unitOfMeasure="Wh">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="roundingEnergyConsumption" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This energy consumption data is calculated by multiplying significantDigits with multiplyingFactors, and rounding down the result.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="significantDigits" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The number of effective digits for data.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="multiplyingFactors" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The unit for data multiplying factors, for example 1 kWh, 0,1 kWh, 0,01 kWh, etc.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="voltage" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The voltage of the device.</Doc>
+					<DataType unitOfMeasure="V">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="current" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The current of the device.</Doc>
+					<DataType unitOfMeasure="A">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="frequency" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The frequency of the device.</Doc>
+					<DataType unitOfMeasure="Hz">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="measuringScope" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The measuring scope of the meter, for example the whole house, a room, or a device.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="energyGeneration">
+			<Doc>This ModuleClass provides information about generation data on electric generator devices such as a photo voltaic power system, fuel cells, or microgeneration.</Doc>
+			<Data>
+				<DataPoint name="powerGenerationData" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Amount of instantaneous generation data.</Doc>
+					<DataType unitOfMeasure="W">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="roundingEnergyGeneration" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This energy consumption data is calculated by multiplying significantDigits with multiplyingFactors, and rounding down the result.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="significantDigits" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The number of effective digits for data.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="multiplyingFactors" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The unit for data multiplying factors, for example. 1 kWh, 0,1 kWh, 0,01 kWh, etc.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="generationSource" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The type of generating source.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="faultDetection">
+			<Doc>This ModuleClass provides information about whether a fault has occurred in a device.</Doc>
+			<Data>
+				<DataPoint name="status" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Status of fault detection.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="code" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The numeric representation of the fault.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="description" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The message representation of the fault.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="filterInfo">
+			<Doc>This ModuleClass provides capabilities for monitoring filter information of a device.</Doc>
+			<Data>
+				<DataPoint name="usedTime" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The cumulative used time in seconds of a filter.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="needsReplacement" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates that the filter needs to be replaced.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="filterLifetime" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Percentage lifetime remaining for the water filter.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="foaming">
+			<Doc>This ModuleClass provides capabilities to control and monitor desired parameters of foam e.g. for foaming milk. It is initially intended to be part of a device that prepare drinks with milk (for example a coffee machine or hot chocolate machine).</Doc>
+			<Data>
+				<DataPoint name="foamingStrength" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current strength of foamed milk. A higher value indicates more foamed milk.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumFoamStrength" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="galleryMode">
+			<Doc>This ModuleClass provides information about the mode of display. The galleryMode includes the display orientation, display interval and display order.</Doc>
+			<Data>
+				<DataPoint name="displayOrientation" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The orientation of display.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumDisplayOrientation" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="displayInterval" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The interval of changing display content.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="displayOrder" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The sequence of the displaying content.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumDisplayOrder" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="gasChargingControl">
+			<Doc>This ModuleClass provides capabilities to recharge the gas meter.</Doc>
+			<Data>
+				<DataPoint name="billingNumber" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The billing number of the remote recharge.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="rechargeCredit" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Amount of recharge money in local currency.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="surplusCredit" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Amount of surplus money in local currency.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="rechargeGas" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Percentage life time remaining for the water filter.</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="surplusGas" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Amount of surplus gas.</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="gasMeterAlarm">
+			<Doc>This ModuleClass provides capabilities to set service parameters of a gas meter.</Doc>
+			<Data>
+				<DataPoint name="lowGasAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of insufficient amount of gas.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowCreditAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of insufficient amount of money..</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="leakageAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of gas leakage.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lockedDownAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of the gas meter being locked. When the gas meter is in use, the lower wheel does not work, called the "dead meter".</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="largeFlowAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of large flow occurring. The instantaneous flow passed exceeds the setting maximum flow of the gas meter.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="magneticDisturb" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of magnetic interference occurring.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="singleCountAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of single reed switch counting. The normal condition is that the double reed switches are working. If only a single reed switch is working, it means that the metering has a problem and shall fire the alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="gasMeterReportInfo">
+			<Doc>This ModuleClass provides information of measurements of a gas meter.</Doc>
+			<Data>
+				<DataPoint name="totalUseValue" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The total consumption of gas.</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="valveStatus" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The status of the gas meter valve. "True" means open, "False" means close.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="geoLocation">
+			<Doc>This ModuleClass provides the capability to get or set geo-location information.</Doc>
+			<Data>
+				<DataPoint name="latitude" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current latitude part of a geo-location.</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="longitude" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current longitude part of a geo-location.</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="altitude" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional current altitude part of a geo-location.</Doc>
+					<DataType unitOfMeasure="m">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="heading" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The azimuth of a device measured in degrees to true north. North is 0.0 degrees, east is 90,0 degrees, south is 180,0 degrees, west is 270,0 degrees. A negative value indicates an unknown heading.</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="horizontalAccuracy" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The optional current horizontal accuracy of the geo-location. It describes a radius around the latitude/longitude coordinate.</Doc>
+					<DataType unitOfMeasure="m">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="verticalAccuracy" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The optional current vertical accuracy of the altitude.</Doc>
+					<DataType unitOfMeasure="m">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="headingAccuracy" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The optional current maximum deviation between the heading and the true geomagnetic heading.</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="targetLatitude" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional target latitude part of a geo-location. This can be used to move a device to a new location.</Doc>
+					<DataType unitOfMeasure="m">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+
+				<DataPoint name="targetLongitude" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional target longitude part of a geo-location. This can be used to move a device to a new location.</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="targetAltitude" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional target altitude part of a geo-location. This can be used to move a device to a new altitude.</Doc>
+					<DataType unitOfMeasure="m">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="glucometer">
+			<Doc>This ModuleClass provides the capability to report the measurement of glucose characteristics.</Doc>
+			<Data>
+				<DataPoint name="concentration" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The measurement of concentration by Glucometer.</Doc>
+					<DataType unitOfMeasure="mg/dl">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="hba1c" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of HbA1c by Glucometer.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="contextExercise" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of context exercise by Glucometer.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="contextMedication" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of context medication by Glucometer. The unit of measure is mg/dl.</Doc>
+					<DataType unitOfMeasure="mg/dl">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="contextCarbohydratesAmount" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of context carbohydrates by Glucometer.</Doc>
+					<DataType unitOfMeasure="g">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="contextCarbohydratesSource" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The timing of meals (for example "breakfast carbohydrates").</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="contextMeal" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The style of meals (for example "casual").</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="contextLocation" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The body location where the Glucometer is worn (for example "finger").</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="contextTester" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The test style (for example "self").</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="contextHealth" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The severity of symptoms (for example "minor"),</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="grinder">
+			<Doc>This ModuleClass is for controlling a grinder, for example in a coffee machine.</Doc>
+			<Data>
+				<DataPoint name="useGrinder" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current status of the grinder enablement. "True" indicates enabled, and "False" indicates disabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="coarseness" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The wished coarseness of the solid supplies after grinding, for example for coffee beans.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumGrindCoarseness" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="grainsRemaining" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The level of remaining grains in a machine having a grinder, for example for remaining coffee beans in the coffee machine grinder.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumGrainsLevel" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="headingSensor">
+			<Doc>This ModuleClass provides the capabilities to indicate the heading (e.g. status of get-in and get-out) of a pedestrian or a vehicle which crossing a control point (e.g. entrance and gate).</Doc>
+			<Data>
+				<DataPoint name="heading" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The azimuth of a device measured in degrees to true north. North is 0.0 degrees, east is 90.0 degrees, south is 180.0 degrees, west is 270.0 degrees. A negative value indicates an unknown heading.</Doc>
+					<DataType unitOfMeasure="degree">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="headingAccuracy" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The optional current maximum deviation between the heading and the true geomagnetic heading.</Doc>
+					<DataType unitOfMeasure="degree">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="heatingZone">
+			<Doc>This ModuleClass provides the capabilities to monitor the status of the heating zone, for example for a cooktop.</Doc>
+			<Data>
+				<DataPoint name="heatingLevel" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The current heating level of the zone. The value range is from 0 (indicating that the zone is not heating) up to the maxHeatingLevel.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxHeatingLevel" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The maximum value allowed for the heating level of the zone.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="height">
+			<Doc>This ModuleClass provides the capability to report the measurement of height.</Doc>
+			<Data>
+				<DataPoint name="height" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The height measurement.</Doc>
+					<DataType unitOfMeasure="cm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="hotWaterSupply">
+			<Doc>This ModuleClass provides the information about the status of supplying hot water into tanks or bath tubes.</Doc>
+			<Data>
+				<DataPoint name="bath" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The status of whether a bath tub is filled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="impactSensor">
+			<Doc>This ModuleClass describes the capabilities on an impact sensor. The impact is a high force or shock over a short time period and the impactSensor detects this.</Doc>
+			<Data>
+				<DataPoint name="impactStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The "impactStatus" indicates as follows: "True" means that a physical impact is detected, "False" means indicates a normal status (no impact detected).</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="impactLevel" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The "impactLevel" provides the level of impact.</Doc>
+					<DataType unitOfMeasure="g">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="impactDirectionHorizontal" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The "impactDirection" indicates the horizontal direction where the impact comes from. The value is 0 to 360 degrees. 0 degrees is the front of the sensor and with clockwise increment.</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="impactDirectionVertical" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The "impactDirection" indicates the vertical direction where the impact comes from. The value is 0 to 360 degrees. 0 degrees is the front of the sensor and with upward increment.</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="infraredSensor">
+			<Doc>This ModuleClass provides the capabilities to indicate whether or not an object has been sensed.</Doc>
+			<Data>
+				<DataPoint name="detectedValue" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The "detectedValue" indicates as follows: "True" means that an object is detected, "False" means no object is detected.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="detectedTime" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The time when the object was detected.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="keepWarm">
+			<Doc>This module allows to control the 'keep warm' feature in devices like coffee machines, kettles etc. It allows to keep water warm for a desired time. This ModuleClass inherits from binarySwitch to store setting for the 'keep warm' feature. If the "powerState" data point in a keepWarmSwitch is "True" then the 'keep warm' function will be performed just after boiling (or heating) process is finished (otherwise this function will not be applied).</Doc>
+			<Data>
+				<DataPoint name="time" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The desired duration of 'keep water warm' function. It indicates how long water shall be kept warm, for example after the boiling in a kettle. </Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="targetTemperature" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Content temperature. </Doc>
+					<DataType unitOfMeasure="C">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="keypad">
+			<Doc>This ModuleClass provides the capability to perform a user defined service through the key-in number. For example, a user can define key 1 as "perform a takeout from a restaurant with combo meal 1". The IoT service provider or user can define the services. </Doc>
+			<Data>
+				<DataPoint name="keyNumber" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The number of the pressed key.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="liquidLevel">
+			<Doc>This ModuleClass provides the desired level of water (or other liquid) for an appliance, for example the desired level of milk for a cup of coffee from a coffee machine.</Doc>
+			<Data>
+				<DataPoint name="liquidLevel" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The desired level of water or other liquid, for example the desired level of milk in a cup of coffee.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumLiquidLevel" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="liquidRemaining">
+			<Doc>This ModuleClass provides the status of water level (or other liquid) for an appliance, for example the level of remaining milk in a coffee machine.</Doc>
+			<Data>
+				<DataPoint name="liquidRemaining" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The remaining level of water or other liquid in an appliance.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumLiquidLevel" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="lock">
+			<Doc>This ModuleClass provides the function to lock and unlock an object.</Doc>
+			<Data>
+				<DataPoint name="lock" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>"True" indicates the object is locked, while "False" indicates the object is not locked.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="magneticSensorParameters">
+			<Doc>This ModuleClass provides capabilities to set service parameters for parking detectors..</Doc>
+			<Data>
+				<DataPoint name="detectionInterval" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Time interval for detecting the geomagnetic field strength.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="initialMagnetic" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The value of initial geomagnetic field strength, which is usually set when the parking detector is initially installed. It may be reset later if the geomagnetic field strength of the local environment is affected by other factors. The value is used as the reference threshold to determine the parkingStatus. When the parking detector detects that the strength of the magnetic field is greater than the initialMagnetic, the parkingStatus is set to "true", otherwise, the parkingStatus is set to "false".</Doc>
+					<DataType unitOfMeasure="G">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="magneticSensitivityLevel" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The level of detection sensitivity. It is implementation specific.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highMagneticAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The alarm of high magnetic interference. The alarm threshold is implementation specific.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="mediaSelect">
+			<Doc>This ModuleClass provides capabilities to control and monitor media input and output of device such as TV or SetTopBox.</Doc>
+			<Data>
+				<DataPoint name="mediaID" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The numeric index of the activated media in the supported media sources list "supportedMediaSources".</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="supportedMediaSources" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of supported input or output media for the given device.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumSupportedMediaSource" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="mediaName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Specifies a pre-defined media input or output.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="status" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Specifies whether the specific media instance is selected ("True") or not ("False").</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="mediaType" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Specifies the type of the media.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumSupportedMediaSource" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="motionSensor">
+			<Doc>This ModuleClass provides the capabilities to indicate the occurrence of motion and raising of an alarm if the triggering criterion is met.</Doc>
+			<Data>
+				<DataPoint name="alarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The detection of the motion occurrence.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="silentTime" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The time that a motionSensor restrains from sending an alarm in case continuous motions are detected after one alarm is produced. This data point can be used to avoid repeated alarm reports.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="sensitivity" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The level of the detection accuracy of the motion sensor. This data point can be used to control the number of the report.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="numberValue">
+			<Doc>This ModuleClass provides the capabilities to represent a number. It also has capabilities for controlled increment and decrement a counter. It can be used to present a number-related functionality in a technology where there is only a weak semantic specification of that functionality.</Doc>
+			<Actions>
+				<Action name="decrementNumberValue" optional="true">
+					<Doc>Decrement the "numberValue" by the value of "step", down to the value of "minimum".</Doc>
+				</Action>
+				<Action name="incrementNumberValue" optional="true">
+					<Doc>Increment the "numberValue" by the value of "stepValue", up to the value of "maxValue".</Doc>
+				</Action>
+				<Action name="resetNumberValue" optional="true">
+					<Doc>Reset the "numberValue" to its "defaultValue".</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="numberValue" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The actual value of the number.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="minValue" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional minimum value of the number. The default is the system-specific minimum value for a float value.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxValue" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional maximum value of the number. The default is the system-specific maximum value for a float value.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="defaultValue" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional default value for the number. The default is 0,0.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="step" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional step size for controlled increment and decrement. The default is 1,0, even when this data point is not implemented.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="openLevel">
+			<Doc>This ModuleClass provides the capabilities to control and monitor the open status of an entity, for example a curtain.</Doc>
+			<Actions>
+				<Action name="open" optional="true">
+					<Doc>Increase the open level by the amount of the "stepValue" up to the "maxLevel".</Doc>
+				</Action>
+				<Action name="close" optional="true">
+					<Doc>Decrease the open level by the amount of the "stepValue" down to the "minLevel".</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="openLevel" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The rounded percentage of the current open level of entity in the range of [0, 100]. 0 percentage shall mean the entity is closed.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="stepValue" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The step value used by the "open" and "close" actions.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="minLevel" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The minimum value allowed for the "openLevel" status. The default value is 0, which means fully closed.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxLevel" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The maximum value allowed for the "openLevel" status. The default value is 100, which means fully opened.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="operationMode">
+			<Doc>This ModuleClasses provides capabilities to control or monitor the operation mode of appliances.</Doc>
+			<Data>
+				<DataPoint name="startPause" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>A value of "True" triggers or starts an operation, and "False" pauses the operation.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="overcurrentSensor">
+			<Doc>This ModuleClass provides capabilities for an over-current sensor.</Doc>
+			<Data>
+				<DataPoint name="overcurrentStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The overcurrentStatus indicates as follows: "True" indicates that an over-current is detected, and "False" indicates a normal status, this means that an over-current is not detected.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="detectedTime" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The time when the over-current was detected.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="duration" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The duration of the detected over-current. The unit of measure is "ms".</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="oximeter">
+			<Doc>This ModuleClass provides the capability to report the measurement of blood oxygen characteristics.</Doc>
+			<Data>
+				<DataPoint name="oxygenSaturation" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The measurement of oxygensaturation by Oximeter. The unit of measure is in percentage.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="ozoneMeter">
+			<Doc>This ModuleClass provides capabilities for an ozone meter. The "ozoneValue…" attributes are optional, but one of them SHALL be provided.</Doc>
+			<Data>
+				<DataPoint name="ozoneValuePPM" readable="true" writable="false" eventable="true" optional="false">
+					<DataType unitOfMeasure="ppm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="ozoneValueMG" readable="true" writable="false" eventable="true" optional="true">
+					<DataType unitOfMeasure="mg/m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="ozoneStatus" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The ozoneStatus indicates the level of ozone status.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumOzoneStatus" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxValue" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The maximum value shows the measurement range of the ozone meter (for example maxValue=5 means the range is 0 to 5 ppm). This attribute is only used that the ozone meter provides "ppm" value.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="parkingStatus">
+			<Doc>This ModuleClass provides the status of the parking detector.</Doc>
+			<Data>
+				<DataPoint name="parkingStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This value indicates the status of the parking space. "False" means not occupied, "True" means occupied.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="periodicalReportConfig">
+			<Doc>This ModuleClass provides capabilities to set parameters of periodic report.</Doc>
+			<Data>
+				<DataPoint name="backoffTime" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The number of seconds to wait before connecting to network.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="period" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Reporting period.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="retryTimes" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The maximum number of re-sent attempts in the case of report failure.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="retryInterval" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The minimum time interval between each message transmission retry.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="phoneCall">
+			<Doc>This ModuleClass provides the capability get or set the caller and recipient IDs as well as to initiate and terminate a call.</Doc>
+			<Actions>
+				<Action name="call" optional="true">
+					<Doc>Initiate an outgoing call.</Doc>
+				</Action>
+				<Action name="answer" optional="true">
+					<Doc>Answer (pickup) an incoming call.</Doc>
+				</Action>
+				<Action name="hangup" optional="true">
+					<Doc>Hangup an established call.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="callerID" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>This data point represents the initiating caller identiﬁcation of a call. In case of an outgoing call this would be the local line ID. This data point is optional. When it is empty for an incoming call, then the caller ID is unknown. When it is empty for an outgoing call, then it is expected that it is set by the PBX or the operator. The format of caller ID is not speciﬁed here.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="recipientID" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>This data point represents the receiving caller identiﬁcation of a call. In case of an incoming call this would be the local line ID and optionally extension. The format of caller ID is not speciﬁed here.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="callState" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This data point represents the current state of an associated phone device regarding calls.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumCallState" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="playerControl">
+			<Doc>This ModuleClass provides capabilities to control and monitor the operational modes of a media player functionality.</Doc>
+			<Actions>
+				<Action name="nextTrack" optional="true">
+					<Doc>Go forward to a next chapter, section or similar marker in the media.</Doc>
+				</Action>
+				<Action name="previousTrack" optional="true">
+					<Doc>Go back to a previous chapter, section or similar marker in the media.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="currentPlayerMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current mode of the player.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumPlayerMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentPlayerModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Name of current player mode in string. This can be used when "currentPlayerMode" is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="supportedPlayerModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of supported modes for a player.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumPlayerMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="speedFactor" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional factor of speeding up or slowing down playback, rewind or fast forward.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="powerSave">
+			<Doc>This ModuleClass provides capabilities to enable the power saving mode of a device and monitor the current status.</Doc>
+			<Data>
+				<DataPoint name="powerSaveEnabled" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current status of the power saving mode. "True" indicates enabled, and "False" indicates not enabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="prePaidCardReader"> 
+			<Doc>The Pre-paid card reader ModuleClass provides functions to read NFC card and indicates its information.</Doc>
+			<Data>
+				<DataPoint name="readStatus" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the status of reading the pre-paid card. “True” means the reader reads the pre-paid card successfully.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cardInfo" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The card information is consisted of numbers of integer values. (1..N).</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="balance" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>This data point indicates the balance of the pre-paid card.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currency" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The currency is depended on the country which the card is used. For example, the unit could be "Dollar" or "$" in US, "Euro" in EU and "Won" in Korea.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="printQueue">
+			<Doc>This ModuleClass provides the capabilities for monitoring printing list information.</Doc>
+			<Data>
+				<DataPoint name="uri" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The URI of the printing file. The URI could be "file://www.example.com/file.extension".</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Simple type="uri" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="printingState" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The printingState is indicating the status of the printing file.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumJobState" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="pulsemeter">
+			<Doc>This ModuleClass provides the capability to report the measurement of pulse characteristics.</Doc>
+			<Data>
+				<DataPoint name="pulseRate" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The measurement of pulserate by pulse meter.</Doc>
+					<DataType unitOfMeasure="bpm">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="rr" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of RR interval by pulse meter.</Doc>
+					<DataType unitOfMeasure="ms">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="energy" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The measurement of energy by pulse meter.</Doc>
+					<DataType unitOfMeasure="kcal/h">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="modality" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The modality of a particular SpO2 measurement.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="pushButton">
+			<Doc>This ModuleClass provides the capability to indicate the operation of a button style switch. A typical application can be an SOS button.</Doc>
+			<Data>
+				<DataPoint name="pushed" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>To indicate the press of the button.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="rainGauge">
+			<Doc>This ModuleClass provides the capabilities to measure the height of fallen rain.</Doc>
+			<Actions>
+				<Action name="resetGauge" optional="false">
+					<Doc>Empty the water container. Set the "height" value to 0.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="gaugeHeight" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the number of mm of rainfall since the last reset of the device.</Doc>
+					<DataType unitOfMeasure="mm">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="recorder">
+			<Doc>This ModuleClass provides the capability to record the video/audio for a defined duration.</Doc>
+			<Data>
+				<DataPoint name="duration" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The duration for video/audio recording. Set to trigger the recorder</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="refrigeration">
+			<Doc>This ModuleClass provides capabilities for a refrigeration function.</Doc>
+			<Data>
+				<DataPoint name="rapidFreeze" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Controls the rapid freeze capability. "True" indicates active, "False" indicates inactive.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="rapidCool" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Controls the rapid cool capability. "True" indicates active, "False" indicates inactive.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="defrost" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Controls the defrost cycle. "True" indicates active, "False" indicates inactive.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="deodorize" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Controls the deodorize cycle. "True" indicates active, "False" indicates inactive.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="degerm" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Controls the degerm cycle. "True" indicates active, "False" indicates inactive.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="relativeHumidity">
+			<Doc>This ModuleClass provides the capability for the device to report the humidity based on a specified rule that is vendor dependent.</Doc>
+			<Data>
+				<DataPoint name="relativeHumidity" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The measurement of the relative humidity value.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="desiredHumidity" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Desired value for humidity. This data point indicates the desired humidity.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="remoteControlEnable">
+			<Doc>This ModuleClasses provides capabilities to monitor the remote controllability of the appliance.</Doc>
+			<Data>
+				<DataPoint name="remoteControlEnabled" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point enables or disables remote controllability and is set by a user locally. "True" indicates enabled remote access, and "False" indicates disabled remote access.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="robotCleanerJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of a robotCleaner.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Currently active job mode (see clause 5.6.23).</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumRobotCleanerJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Name of current job mode as a string. This can be used when "currentJobMode" is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumRobotCleanerJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="runState">
+			<Doc>This ModuleClasses provides capabilities to control and the monitor machine state of appliances.</Doc>
+			<Data>
+				<DataPoint name="currentMachineState" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The currently active machine state.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumMachineState" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="machineStates" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>A list of possible machine states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumMachineState" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobState" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The currently active job state at the level of some transaction being executed by the device.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumJobState" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobStates" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The list of possible job states that the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumMachineState" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="progressPercentage" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The indication of current job progress in percentage.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="securityMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor a security mode.</Doc>
+			<Data>
+				<DataPoint name="currentSecurityMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Current security mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumSecurityMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="securityModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible security modes the device supports (see clause 5.6.24).</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumSecurityMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="sessionDescription">
+			<Doc>This ModuleClass provides the capabilities for a sessionDescription containing a URL at which the specified media can be accessed and the definition of media using SDP.</Doc>
+			<Data>
+				<DataPoint name="uri" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>A URL at which the specified media can be accessed.</Doc>
+					<DataType>
+						<Simple type="uri" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="sdp" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Media description using SDP. One or more comma separated multiple SDP lines (SDP media or attribute line) can be included using SDP description syntax as defined in the SDP specification in IETF RFC4566.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="shoesWasherJobMode">
+			<Doc>This ModuleClasses provides capabilities to control and monitor the job modes of a shoesWasher.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumShoesWasherJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Name of current job mode as a string. This can be used when "currentJobMode" is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumShoesWasherJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="signalPanel">
+			<Doc>This ModuleClass displays a signal (e.g. direction arrow) to indicate a gate is permitted to get-in or get-out on a panel.</Doc>
+			<Data>
+				<DataPoint name="signal" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The signal is true, the panel indicates go forward signal or icon. If the signal is false, the panel displays stop signal or icon.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="signalStrength">
+			<Doc>This ModuleClass provides the capability to monitor the strength of the signal.</Doc>	
+			<Data>
+				<DataPoint name="lqi" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The current value of link quality indicator, which reflects the scaling of rssi by dividing the received signal strength over reference signal strength. The common unit for lqi is percentage [0,100]. For the detailed definition, see IEEE 802.15.4 [i.4], clause 6.7.8.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="rssi" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The current value of received signal strength indicator, which reflects the raw signal level.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="slcAlarm">
+			<Doc>This ModuleClass provides capabilities to provide alarm information of street light controller.</Doc>
+			<Data>
+				<DataPoint name="overCurrentThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of over current.</Doc>
+					<DataType unitOfMeasure="A">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="overCurrentDuration" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The duration of over current to trigger the alarm.</Doc>
+					<DataType unitOfMeasure="min">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="underCurrentThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of under current.</Doc>
+					<DataType unitOfMeasure="A">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>	
+				<DataPoint name="underCurrentDuration" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The duration of under current to trigger the alarm.</Doc>
+					<DataType unitOfMeasure="min">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>	
+				<DataPoint name="overVoltageThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of over voltage.</Doc>
+					<DataType unitOfMeasure="V">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>	
+				<DataPoint name="overVoltageDuration" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The duration of over voltage to trigger the alarm.</Doc>
+					<DataType unitOfMeasure="min">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>	
+				<DataPoint name="underVoltageThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of under voltage.</Doc>
+					<DataType unitOfMeasure="V">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>	
+				<DataPoint name="underVoltageDuration" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The duration of under voltage to trigger the alarm.</Doc>
+					<DataType unitOfMeasure="min">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="overVoltagePercent" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of over current in terms of percentage. The value range is [0,100]. This is the alternative trigger of the overVoltageAlarm and should be mutually exclusive to the overVoltageThreshold.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="underVoltagePercent" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The duration of under current in terms of percentage. The value range is [0,100]. This is the alternative trigger of the underVoltageAlarm and should be mutually exclusive to the underVoltageThreshold.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="standardreferenceVoltage" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The reference voltage used as the basis of the overVoltagePercent and underVoltagePercent.</Doc>
+					<DataType unitOfMeasure="V">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="overCurrentAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of over current.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="underCurrentAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of under current.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="overVoltageAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of over voltage.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="underVoltageAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The alarm of under voltage.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="slcParameterSetting">
+			<Doc>This ModuleClass provides capabilities to set service parameters.</Doc>
+			<Data>
+				<DataPoint name="lightCount" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>Number of lampholders controlled by the street light controller.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="timePlanStatus" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>"False" indicates the time plan is not used. "True" indicates the time plan is being used.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="timeRangeCount" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The number of time ranges for the time plan.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="timeRange" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>An array of sequential time points which define the time plan. Each time point is the start time of the next time range as well as the end of previous time range in the time plan.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Simple type="time" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="timeRangeLightDimmingValue" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>An array containing the dimming values in different time ranges. In the case that lightCount is larger than 1, it is a 2-dimentional array describing the dimming value of each lampholder in each time range. Editor's Note: the data type is FFS for this datapoint.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Simple type="string" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="slcReportInfo">
+			<Doc>This ModuleClass provides information of status of the street light controller.</Doc>
+			<Data>
+				<DataPoint name="voltageFrequency" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The frequency of voltage.</Doc>
+					<DataType unitOfMeasure="Hz">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="switchStatus" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>This value indicates the status of light switch. "False": off, "True": on.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="onlineStatus" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the communication status of light. "False": offline, "True": online.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lightVoltage" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The voltage of the street light controller.</Doc>
+					<DataType unitOfMeasure="V">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lightCurrent" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The current of the street light controller.</Doc>
+					<DataType unitOfMeasure="A">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lightDimmingValue" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The dimming value of the street light.</Doc>
+					<DataType unitOfMeasure="pct">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lightPowerFactor" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The light power factor is the ratio of active power to apparent power. Power factor is a factor that measures the efficiency of electrical equipment. The value range is [0,1].</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lightActivePower" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Active power is the electrical power required to keep the electrical equipment running normally, that is, the electrical power that converts electrical energy into other forms of energy, such as mechanical, optical, thermal, and so on.</Doc>
+					<DataType unitOfMeasure="kW">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lightReactivePower" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The reactive power is the electrical power required to establish an alternating magnetic field and induced magnetic flux.</Doc>
+					<DataType unitOfMeasure="kVA">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lightApparentPower" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>This value indicates the apparent power that is mainly used to calculate the energy consumption of the street light.</Doc>
+					<DataType unitOfMeasure="kVA">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lightPolarizationAxis" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The angle of the polarization axis in case street light devices support this feature. The PolarizationAxis is measured starting from Editors Note: DESCRIPTION NEEDED</Doc>
+					<DataType unitOfMeasure="deg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="colourTemperature" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The current colour temperature of the street lights.</Doc>
+					<DataType unitOfMeasure="K">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lampTechnology" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>A string that indicates the type of lamp technology that is used in the street lamps, e.g. "LED", "Tungsten", etc.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="smokeSensor">
+			<Doc>This ModuleClass provides the capabilities to indicate the detection of smoke and raising an alarm if the triggering criterion is met.</Doc>
+			<Actions>
+				<Action name="muteSmokeSensor" optional="true">
+					<Doc>Mute the smoke sensor alarm.</Doc>
+				</Action>
+				<Action name="test" optional="true">
+					<Doc>Testing the alarm.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="alarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The alarm is indicated as follows: "True" indicates that smoke has been detected, "False" indicates a normal status, that means that smoke is not detected.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="detectedTime" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The date and time the smoke is detected.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="smokeThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold to trigger the alarm. The unit of measure is ppm.</Doc>
+					<DataType unitOfMeasure="ppm">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentValue" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The current data value of the smoke sensor.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="sensorFault" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>"True" indicates the sensor fault status of smoke sensor. "False" indicates the sensor fault of smoke sensor has been eliminated.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowVoltage" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>"True" indicates the low voltage status of smoke sensor. "False" indicates the low voltage alarm of smoke sensor has been eliminated.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="dismantled" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>"True" indicates the smoke sensor is dismantled. "False" indicates the dismantled alarm of smoke sensor has been eliminated.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="powerOn" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>True" indicates the smoke sensor is powered on. "False" is invalid.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="sphygmomanometer">
+			<Doc>This ModuleClass provides the capability to report the measurement of blood pressure characteristics.</Doc>
+			<Data>
+				<DataPoint name="diastolicPressure" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The measurement of diastolic pressure by sphygmomanometer.</Doc>
+					<DataType unitOfMeasure="mmHg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="systolicPressure" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The measurement of systolic pressure by sphygmomanometer.</Doc>
+					<DataType unitOfMeasure="mmHg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="meanPressure" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The measurement of mean arterial pressure by sphygmomanometer.</Doc>
+					<DataType unitOfMeasure="mmHg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="spinLevel">
+			<Doc>This ModuleClass provides capabilities to control and monitor the level of spin. It is intended to be part of devices which use spinning function such as a washing machine and a dryer.</Doc>
+			<Data>
+				<DataPoint name="spinLevelStrength" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The value of spin-dry level. A higher value indicates a higher spin level.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumSpinLevelStrength" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="steamClosetJobMode">
+			<Doc>This ModuleClass provides capabilities to control and monitor the job modes of steamCloset.</Doc>
+			<Data>
+				<DataPoint name="currentJobMode" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Currently active job mode.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumSteamClosetJobMode" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="currentJobModeName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Name of current job mode as a string. This can be used when "currentJobMode" is vendor-specific.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="jobModes" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>List of possible job states the device supports.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Extend domain="org.onem2m.horizontal" entity="enumSteamClosetJobMode" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="televisionChannel">
+			<Doc>This ModuleClass provides capabilities to set and get channels of a device that has a channel list.</Doc>
+			<Actions>
+				<Action name="upChannel" optional="true">
+					<Doc>Change the current channel to the next channel in the stored list of available channels. If the current channel is the last one in the list, the new set channel may be the first one in the list.</Doc>
+				</Action>
+				<Action name="downChannel" optional="true">
+					<Doc>Change the current channel to the previous channel in the stored list of available channels. If the current channel is the first one in the list, the new set channel may be the last one in the list.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="channelNumber" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>Current channel number.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="availableChannels" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The list of available channel numbers which may be built by automatic scan and/or manual selection.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Simple type="integer" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="previousChannel" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The channel number which was selected previously.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="channelName" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Current human-friendly channel name in string, for example 'CNN'.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="temperature">
+			<Doc>This ModuleClass provides capabilities to represent the current temperature and target temperature of devices such as an air conditioner, refrigerator, oven, etc.</Doc>
+			<Data>
+				<DataPoint name="currentTemperature" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The current temperature.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="targetTemperature" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The desired temperature to reach.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="unit" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The default is Celsius (C).</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumTemperatureUnit" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="minValue" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Minimum value of "targetTemperature".</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxValue" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Maximum value of "targetTemperature".</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="stepValue" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Step value allowed for "targetTemperature".</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="temperatureAlarm">
+			<Doc>This ModuleClass provides the capabilities to indicate the detection of abnormal temperatures and raises an alarm if the triggering criterion is met.</Doc>
+			<Data>
+				<DataPoint name="unit" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The default is Celsius (C).</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumTemperatureUnit" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="temperature" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>To report the value of the temperature.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highTemperatureAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>High temperature alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highTemperatureAlarmThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of maximum temperature alarm.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowTemperatureAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Low temperature alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowTemperatureAlarmThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of minimum temperature alarm.</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="alarmTimestamp" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The timestamp since the alarm is active.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="textMessage">
+			<Doc>This ModuleClass provides capabilities to set and get a text message.</Doc>
+			<Actions>
+				<Action name="resetTextMessage" optional="true">
+					<Doc>Reset the receiver of the message to the "defaultValue".</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="textMessage" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current message value.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="supportedMessageValues" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>List of supported values for the message. Each of the values in this list shall be URL-encoded. An encoded value shall not contain white spaces.</Doc>
+					<DataType>
+						<Array>
+							<DataType>
+								<Simple type="string" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="minLength" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The optional minimum length in characters of the message. The default is 0.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="maxLength" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The optional maximum length in characters of the message. The default is unlimited.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="messageEncoding" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The optional expected method for character encoding of the message. The default is "UTF8".</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="defaultValue" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The optional default value for "textMessage". The default is an empty string.</Doc>
+					<DataType>
+						<Simple type="string" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="timer">
+			<Doc>This ModuleClass provides capabilities to monitor and control the times when the appliance executes its operations, that means when it starts, when it ends, etc.</Doc>
+			<Actions>
+				<Action name="activateClockTimer" optional="true">
+					<Doc>Activate current clock timer.</Doc>
+				</Action>
+				<Action name="deactivateClockTimer" optional="true">
+					<Doc>Deactivate current clock timer.</Doc>
+				</Action>
+			</Actions>
+			<Data>
+				<DataPoint name="referenceTimer" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>A timer (for example. a time-based value, App Defined Epoch, Progressive) expressed in seconds. The value indicates a time counter to be used as reference for the other time-based data points of this ModuleClass. Usually it is the time since the last event of power-on of the producer (or more in detail the since the boot of its connectivity node).</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="targetTimeToStart" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>A time span (for example a time-based value, App Defined Epoch, Fixed) expressed in seconds. The value indicates the time when the appliance is expected to start its operation, starting counting from the last "referenceTimer".</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="targetTimeToStop" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>A time span (for example a time-based value, App Defined Epoch, Fixed) expressed in seconds. The value indicates the time when the appliance is expected to stop its operation, starting counting from the last "referenceTimer".</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="estimatedTimeToEnd" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>A timer (for example a time-based value, App Defined Epoch, Progressive) expressed in seconds. The value indicates the time to the end of an appliance's operations. It is calculated at runtime by the device itself during the execution of its operation.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="runningTime" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>A timer (for example a time-based value, App Defined Epoch, Progressive) expressed in seconds. It indicates the time of the current operation. Usually its value is increasing one value per second. It starts counting from 0 when the operation starts and stops counting when the operation ends.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="targetDuration" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>A time span (for a time-based value, App Defined Epoch, Fixed) expressed in seconds. The value indicates a time that represents the target duration of the operation as per user selection.</Doc>
+					<DataType>
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="absoluteStartTime" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>An absolute time to specify the start time.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="absoluteStopTime" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>An absolute time to specify the stop time.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="touchScreen">
+			<Doc>This ModuleClass provides the capability to get selections of a user from the pre-defined menus on the screen as parts of a process of charging transportation payment card of the user.</Doc>
+			<Data>
+				<DataPoint name="pushed" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the press of the button. (1..N)</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="positionX" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the horizontal position of the touching. (1..N)</Doc>
+					<DataType unitOfMeasure="px">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="positionY" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>This data point indicates the vertical position of the touching. (1..N)</Doc>
+					<DataType unitOfMeasure="px">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="turbo">
+			<Doc>This ModuleClass provides capabilities to enable turbo mode and monitor the current status of the turbo function. It is intended to be part of devices which use turbo function such as an air conditioner, a washing machine, etc.</Doc>
+			<Data>
+				<DataPoint name="turboEnabled" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The current status of the turbo mode. "True" indicates enbaled, and "False" indicates not enabled.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="uvSensor">
+			<Doc>This ModuleClass describes the capabilities of an ultraviolet sensor.</Doc>
+			<Data>
+				<DataPoint name="uvValue" readable="true" writable="false" eventable="true" optional="false">
+					<DataType unitOfMeasure="mW/cm^2">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="uvStatus" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The "uvStatus" indicates the level of the UV radiation status (see clause 5.6.30).</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumUvStatus" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="waterFilterType">
+			<Doc>This ModuleClass indicates the type of the water purifier.</Doc>
+			<Data>
+				<DataPoint name="filterType" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The type of water purifier. list of Water Filter Type.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumWaterFilterType" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="waterFlow">
+			<Doc>This ModuleClass provides capabilities for controlling the water strength of a device.</Doc>
+			<Data>
+				<DataPoint name="waterFlowStrength" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The desired level of water flow. A higher value indicates higher water flow.</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumWaterFlowStrength" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="waterMeterAlarm">
+			<Doc>This ModuleClass provides capabilities to provide alarm information of water meter, such as the alarm of low water flow. Once an alarm is fired, a notification should be sent out from the device and no historical alarm is stored locally, therefore no need to associate timestamp with the alarms.</Doc>
+			<Data>
+				<DataPoint name="highFlowAlarmThreshold" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The threshold of continuous high flow alarm.</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highFlowDuration" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The duration of high water flow.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highFlowAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Continuous high water flow alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowFlowAlarmThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of continuous low flow alarm.</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowFlowDuration" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The duration of low water flow.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowFlowAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Continuous low water flow alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="reverseFlowAlarmThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of continuous reverse flow alarm.</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="reverseFlowDuration" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The duration of reverse water flow.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="reverseFlowAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Reverse flow alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highPressureAlarmThreshold" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The threshold of high water pressure alarm.</Doc>
+					<DataType unitOfMeasure="bar">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highPressureAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>High water pressure alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowPressureAlarmThreshold" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The threshold of low water pressure alarm.</Doc>
+					<DataType unitOfMeasure="bar">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowPressureAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Low water pressure alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highTemperatureAlarmThreshold" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The threshold of maximum water temperature alarm.</Doc>
+					<DataType unitOfMeasure="C">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highTemperatureAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>High water temperature alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowTemperatureAlarmThreshold" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The threshold of minimum water temperature alarm.</Doc>
+					<DataType unitOfMeasure="C">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowTemperatureAlarm" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Low water temperature alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="highTemperatureInnerAlarmThreshold" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The threshold of high temperature alarm inside water meter.</Doc>
+					<DataType unitOfMeasure="C">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="innerHighInternalTemperatureAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Internal high temperature alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="innerErrorAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Internal error alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="innerTemperatureSensorFault" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Internal temperature sensor failure.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="tamperAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Data was tampered alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="waterTemperatureSensorFault" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>Water temperature sensor failure.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="pressureSensorFault" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Pressure sensor failure.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="communicationAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Communication abnormality alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="magneticInterference" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Magnetic interference warning.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="storageFault" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Storage failure alarm.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="urgencyButtonPush" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Indicate the event of the urgency button being pushed. Pushing the urgency button may give a user a temporary right to still use the water meter (e.g. for 3 days) after an unpaid bill.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="buttonFault" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Button error flag.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="demolitionAlarm" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Demolition sign.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="impulseFault" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Pulse anomaly flag.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="vibrationSensorFault" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Vibration sensor failure.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="waterMeterReportInfo">
+			<Doc>This ModuleClass provides information of measurements of the watermeter.</Doc>
+			<Data>
+				<DataPoint name="dailyUseWaterTime" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The total time of water consumption daily.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cumulativeFlow" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The total consumption of water (since the activation of the meter).</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cumulativeFlowDaily" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The cumulative daily consumption of water (begins at 00:00).</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="positiveCumulativeFlow" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The positive cumulative consumption of water daily (begins at 00:00).</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="negativeCumulativeFlow" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The negative cumulative consumption of water daily (begins at 00:00).</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="peakFlowRate" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Daily maximum instantaneous water flow rate.</Doc>
+					<DataType unitOfMeasure="m^3/h">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="peakFlowRateTime" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The timestamp of the daily highest instantaneous water flow rate.</Doc>
+					<DataType unitOfMeasure="m^3/h">
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowestFlowRate" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Daily lowest instantaneous water flow rate.</Doc>
+					<DataType unitOfMeasure="m^3/h">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowestFlowRateTime" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The timestamp of daily lowest instantaneous water flow rate.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="peakReverseFlowRate" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Daily reverse maximum instantaneous water flow rate.</Doc>
+					<DataType unitOfMeasure="m^3/h">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="peakReverseFlowRateTime" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The timestamp of daily reverse highest instantaneous water flow rate.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowestReverseFlowRate" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Daily reverse lowest instantaneous water flow rate.</Doc>
+					<DataType unitOfMeasure="m^3/h">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="lowestReverseFlowRateTime" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>The timestamp of daily reverse lowest instantaneous water flow rate.</Doc>
+					<DataType unitOfMeasure="m^3/h">
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="intervalFlow" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Water consumption records measured at the interval of "flowInterval" per day.</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Array>
+							<DataType>
+								<Simple type="float" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="reverseIntervalFlow" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Water reverse consumption records measured at the interval of "reverseFlowInterval" per day.</Doc>
+					<DataType unitOfMeasure="m^3">
+						<Array>
+							<DataType>
+								<Simple type="float" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="waterIntervalTemperature" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Water temperature records measured at the interval of "waterTemperatureInterval" per day.</Doc>
+					<DataType unitOfMeasure="C">
+						<Array>
+							<DataType>
+								<Simple type="float" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+				<DataPoint name="waterIntervalPressure" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Water pressure records measured at the interval of "waterPressureInterval" per day.</Doc>
+					<DataType unitOfMeasure="bar">
+						<Array>
+							<DataType>
+								<Simple type="float" />
+							</DataType>
+						</Array>
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="waterMeterSetting">
+			<Doc>This ModuleClass provides capabilities to set service parameters for data sampling and reporting.</Doc>
+			<Data>
+				<DataPoint name="flowInterval" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The measurement interval of water consumption.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="reverseFlowInterval" readable="true" writable="true" eventable="true" optional="false">
+					<Doc>The measurement interval of reverse water consumption.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="waterTemperatureInterval" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The measurement interval of water temperature.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="waterPressureInterval" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The measurement interval of reverse water pressure.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="intensiveSampleInterval" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The time interval of intensive data sampling.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="intensiveReportInterval" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The time interval of intensive data report.</Doc>
+					<DataType unitOfMeasure="s">
+						<Simple type="integer" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="intensiveReportStartTime" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The start time of data intensive report.</Doc>
+					<DataType>
+						<Simple type="datetime" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="waterSensor">
+			<Doc>This ModuleClass provides the capabilities to indicate whether or not water has been sensed, and raising an alarm if the triggering criterion is met.</Doc>
+			<Data>
+				<DataPoint name="alarm"  readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The detection of water. The alarm is indicated as follows: "True" indicates that water has been detected, "False" indicates a normal status, that means that water is not detected.</Doc>
+					<DataType>
+						<Simple type="boolean" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="waterQualityMonitor">
+			<Doc>This ModuleClass provides the information of water quality detection.</Doc>
+			<Data>
+				<DataPoint name="algae" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Blue-green algae.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="anionics" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>An-ionic surfactant.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="aroh" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Volatile phenol (ArOH).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="as" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Arsenic (As).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="biotoxicity" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Biological toxicity.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="bod" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Biochemical oxygen demand (BOD) is the amount of dissolved oxygen consumed during the biochemical reaction of biodegradable organic matter that is decomposed by microorganisms in water under certain conditions.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cod" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Chemical oxygen demand (COD) is the amount of reducing substance that needs to be oxidized in a water sample.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="conductivity" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Conductivity is a parameter used to describe the ease of charge flow in a substance.</Doc>
+					<DataType unitOfMeasure="S/m">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cd" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Cadmium (Cd).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="chlorophyll_a" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Chlorophyll a.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cn" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Cyanide (CN).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cr6" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Hexavalent chromium (Cr6).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="cu" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Cuprum (Cu).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="do" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Dissolved oxygen (DO). Molecular oxygen in the air dissolved in water is called dissolved oxygen.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="f" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Fluoride (F).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="fe" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Total iron (Fe).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="ftu" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Turbidity (FTU) which refers to degree of hindrance of the solution as the light passes through it.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="hg" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Mercury (Hg).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="kmno4" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Permanganate index which refers to the amount of oxidant consumed in the water samples using potassium permanganate as an oxidant in an acidic or alkaline medium. (KMnO4).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="nh3nh4" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Ammonia nitrogen (NH3NH4) is the nitrogen in the form of free ammonia (NH3) and ammonium ions (NH4+) in water.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="no3n" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Nitrate nitrogen (NO3N).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="oil" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Petroleum pollutants.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="pb" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Lead (Pb).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="ph" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Potential Of Hydrogen (pH).</Doc>
+					<DataType>
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="sulfide" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Sulfide.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="temperature" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Water temperature.</Doc>
+					<DataType unitOfMeasure="C">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="tn" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Total nitrogen (TN) which is defined as the total amount of various forms of inorganic and organic nitrogen in water.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="tp" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Total phosphorus (TP) which is the result of the conversion of various forms of phosphorus into orthophosphate after digestion of the water sample, measured in milligrams of phosphorus per liter of water sample.</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="zn" readable="true" writable="false" eventable="true" optional="true">
+					<Doc>Zinc (Zn).</Doc>
+					<DataType unitOfMeasure="mg/L">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+		<ModuleClass name="weight">
+			<Doc>This ModuleClass provides the capability to report the measurement of weight.</Doc>
+			<Data>
+				<DataPoint name="weight" readable="true" writable="false" eventable="true" optional="false">
+					<Doc>The weight measurement.</Doc>
+					<DataType unitOfMeasure="kg">
+						<Simple type="float" />
+					</DataType>
+				</DataPoint>
+				<DataPoint name="unit" readable="true" writable="true" eventable="true" optional="true">
+					<Doc>The unit of measure for the weight values. The default is kilogram (kg).</Doc>
+					<DataType>
+						<Extend domain="org.onem2m.horizontal" entity="enumWeightUnit" />
+					</DataType>
+				</DataPoint>
+			</Data>
+		</ModuleClass>
+	</ModuleClasses>
+</Domain>
