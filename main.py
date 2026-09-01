@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import sys
+import os
 
 import colorama
 
@@ -66,7 +66,7 @@ async def _connect_onem2m(cfg: AppConfig, downlink_queue: "asyncio.Queue[Downlin
         await onem2m.connect()
     except ConnectionError:
         logger.critical("Fatal: could not connect to MQTT broker, exiting", exc_info=True)
-        sys.exit(1)
+        os._exit(1)  # sys.exit() would hang on a lingering non-daemon thread
 
     # Pre-AE-ID bootstrap topics only -- Translator._ensure_ae() subscribes
     # our real AE-ID's topic once that's known.
@@ -77,11 +77,18 @@ async def _connect_onem2m(cfg: AppConfig, downlink_queue: "asyncio.Queue[Downlin
 
 async def _connect_zigbee(cfg: AppConfig, uplink_queue: "asyncio.Queue[UplinkFrame]") -> ZigbeeHandler:
     zigbee = ZigbeeHandler(cfg.serial, uplink_queue)
-    try:
-        await zigbee.connect()
-    except ConnectionError:
-        logger.critical("Fatal: could not open Zigbee serial/TCP link, exiting", exc_info=True)
-        sys.exit(1)
+    # asyncio.wait(), not wait_for(): a stuck NCP handshake can block inside
+    # an uncancellable background thread, so wait_for()'s own cancel-and-wait
+    # would hang too -- this just stops watching and force-exits instead.
+    connect_task = asyncio.ensure_future(zigbee.connect())
+    done, _pending = await asyncio.wait({connect_task}, timeout=cfg.serial.radio_connect_timeout_sec)
+    if connect_task not in done:
+        logger.critical("Fatal: Zigbee radio connect timed out, exiting")
+        os._exit(1)
+    exc = connect_task.exception()
+    if exc is not None:
+        logger.critical("Fatal: could not open Zigbee serial/TCP link, exiting", exc_info=exc)
+        os._exit(1)  # sys.exit() would hang on a lingering non-daemon thread
     return zigbee
 
 
