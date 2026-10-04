@@ -17,9 +17,6 @@ from zigbee_handler import UplinkFrame, ZigbeeHandler, level_to_percent, percent
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
-# oneM2M protocol constants
-# ---------------------------------------------------------------------------
 class ResourceType(IntEnum):
     ACP = 1
     AE = 2
@@ -38,10 +35,6 @@ class Operation(IntEnum):
     DELETE = 4
     NOTIFY = 5
 
-
-# net=1 ("Update of Resource"). TinyIoT doesn't support Blocking Update
-# (net=7), so this gateway uses the optimistic model: CSE commits first,
-# notifies us after, and we correct back on failure -- see _revert_fields().
 NET_UPDATE = 1
 
 
@@ -53,18 +46,10 @@ class OneM2MError(Exception):
         self.pc = pc
         super().__init__(f"oneM2M response status code {rsc}")
 
-
-# ---------------------------------------------------------------------------
-# Zigbee <-> SDT bridge. SDT itself doesn't know Zigbee exists, so which ZCL
-# cluster maps to which ModuleClass (and how to read/convert it) is
-# hand-maintained here.
-# ---------------------------------------------------------------------------
 ON_OFF_CLUSTER = 0x0006
 LEVEL_CONTROL_CLUSTER = 0x0008
 COLOR_CLUSTER = 0x0300
 
-# ZCL cluster id -> SDT ModuleClass name. Used to classify a device's
-# supported ModuleClasses from its real interviewed cluster list.
 ZCL_CLUSTER_TO_MODULE: dict[int, str] = {
     ON_OFF_CLUSTER: "binarySwitch",
     LEVEL_CONTROL_CLUSTER: "brightness",
@@ -73,19 +58,10 @@ ZCL_CLUSTER_TO_MODULE: dict[int, str] = {
 
 _KNOWN_MODULES = frozenset(ZCL_CLUSTER_TO_MODULE.values())
 
-# Color Control's color_capabilities bitmap (attr 0x400A), "XY supported"
-# bit -- cluster presence alone doesn't mean XY color specifically is
-# supported (Hue/Sat-only and CT-only bulbs share the same cluster).
 _COLOR_CAPABILITIES_XY_BIT = 0x0008
 
-# Home Automation profile ID (zigpy.profiles.zha.PROFILE_ID) -- device_type
-# below only means what we think it means under this profile.
 _HA_PROFILE_ID = 0x0104
 
-# (profile_id, device_type) -> SDT DeviceClass name. Keyed by both together
-# since the same device_type number means something else under a different
-# profile. A device's self-declared type is a more direct classification
-# signal than inferring purely from cluster presence -- see _classify_device().
 _ZCL_DEVICE_TYPE_TO_SDT_CLASS: dict[tuple[int, int], str] = {
     (_HA_PROFILE_ID, 0x0100): "deviceLight",  # ON_OFF_LIGHT
     (_HA_PROFILE_ID, 0x0101): "deviceLight",  # DIMMABLE_LIGHT
@@ -94,21 +70,14 @@ _ZCL_DEVICE_TYPE_TO_SDT_CLASS: dict[tuple[int, int], str] = {
     (_HA_PROFILE_ID, 0x010D): "deviceLight",  # EXTENDED_COLOR_LIGHT
 }
 
-# Inverse of ZCL_CLUSTER_TO_MODULE -- lossless only because each module
-# currently maps to exactly one cluster; nothing enforces that automatically.
 _MODULE_TO_CLUSTER: dict[str, int] = {module: cluster for cluster, module in ZCL_CLUSTER_TO_MODULE.items()}
 
-# Module name -> zigpy attribute names to Read (cluster comes from
-# _MODULE_TO_CLUSTER). colour's pair combines into RGB, so it's read here
-# but deliberately excluded from ATTR_NAME_MAP below.
 _MODULE_READ_ATTRS: dict[str, list[str]] = {
     "binarySwitch": ["on_off"],
     "brightness": ["current_level"],
     "colour": ["current_x", "current_y"],
 }
 
-# Module name -> its flexContainer's default field values, used at
-# registration before/without a real Read.
 _MODULE_DEFAULTS: dict[str, dict[str, object]] = {
     "binarySwitch": {"state": False},
     "brightness": {"brightness": 0},
@@ -116,31 +85,16 @@ _MODULE_DEFAULTS: dict[str, dict[str, object]] = {
     "faultDetection": {"status": False},
 }
 
-# TS-0023 faultDetection doubles as our online/offline signal (status=true
-# means unreachable). No ZCL backing -- added declaratively in
-# _classify_device(), not from the device's real cluster set.
 FAULT_DETECTION_MODULE = "faultDetection"
 
-# (cluster, attr) -> (field name, uplink converter, downlink converter).
-# Covers every 1:1 attribute<->field case both directions -- "state" needs a
-# real bool() (zigpy decodes on_off as an IntEnum, which json.dumps would
-# serialize as 0/1, rejected by a strict CSE), "brightness" needs a
-# percent<->ZCL-level scale. color needs current_x+current_y combined, so
-# it's handled separately by _accumulate_color_xy()/_apply_rgb_downlink().
 ATTR_NAME_MAP: dict[tuple[int, str], tuple[str, Callable[[object], object], Callable[[object], object]]] = {
     (ON_OFF_CLUSTER, "on_off"): ("state", lambda v: bool(v), lambda v: bool(v)),
     (LEVEL_CONTROL_CLUSTER, "current_level"): ("brightness", level_to_percent, percent_to_level),
 }
 
-# Color attrs tracked for uplink -- see _accumulate_color_xy().
 _COLOR_XY_ATTRS = ("current_x", "current_y")
 
-# Downlink mirror of _COLOR_XY_ATTRS -- red/green/blue buffered the same way, see _accumulate_rgb().
 _RGB_FIELDS = ("red", "green", "blue")
-
-# Every field name this gateway writes into a module flexContainer. The CSE
-# stores these under their DataPoint shortName, so an incoming downlink body
-# has to be translated back through this reverse map first.
 _KNOWN_DATAPOINT_FIELDS = ("state", "brightness", "red", "green", "blue")
 _SHORTNAME_TO_FIELD: dict[str, str] = {
     sdt_loader.SHORT_NAMES[field]: field for field in _KNOWN_DATAPOINT_FIELDS
@@ -157,23 +111,12 @@ def _tracked_attrs_for_modules(modules: tuple[str, ...]) -> dict[int, list[str]]
             grouped[cluster] = attrs
     return grouped
 
-
-# Downlink target for each CSE field ATTR_NAME_MAP covers -- (module, field)
-# -> (cluster, attr, downlink converter), already-converted before reaching
-# ZigbeeHandler.send_command(). Derived automatically from ATTR_NAME_MAP.
-# Keyed by (module, field), not field alone -- field/DataPoint names are
-# only guaranteed unique *within* one ModuleClass, not across all of them.
-# color still can't be derived this way -- see set_color_rgb().
 DOWNLINK_ATTR_MAP: dict[tuple[str, str], tuple[int, str, Callable[[object], object]]] = {
     (ZCL_CLUSTER_TO_MODULE[cluster], name): (cluster, attr, downlink_convert)
     for (cluster, attr), (name, _uplink_convert, downlink_convert) in ATTR_NAME_MAP.items()
 }
 
 
-# ---------------------------------------------------------------------------
-# Device-type classification: given a device's real cluster set, figure out
-# which SDT DeviceClass/ModuleClasses it actually supports.
-# ---------------------------------------------------------------------------
 @dataclass(frozen=True)
 class DeviceProfile:
     device_class: str          # sdt_loader.DEVICE_CLASSES key, e.g. "deviceLight"
@@ -185,12 +128,6 @@ def _classify_device(
     profile_id: Optional[int] = None,
     device_type: Optional[int] = None,
 ) -> Optional[DeviceProfile]:
-    """Picks the DeviceClass from (profile_id, device_type) when recognized
-    and its required modules check out against real clusters; else falls
-    back to best-match scoring against sdt_loader.DEVICE_CLASSES by real
-    cluster set. Either way, WHICH modules are supported always comes from
-    the real cluster set, never device_type.
-    """
     supported = {ZCL_CLUSTER_TO_MODULE[c] for c in cluster_ids if c in ZCL_CLUSTER_TO_MODULE}
     if not supported:
         return None
@@ -225,11 +162,6 @@ def _classify_device(
         modules = modules | {FAULT_DETECTION_MODULE}
     return DeviceProfile(device_class=best_class, modules=tuple(sorted(modules)))
 
-
-# ---------------------------------------------------------------------------
-# Deterministic device <-> CSE resource-name mapping -- target URI is always
-# computable from (ieee_addr, endpoint) alone, so nothing needs caching.
-# ---------------------------------------------------------------------------
 _DEVICE_RN_PREFIX = "bulb"
 
 
@@ -244,12 +176,6 @@ def _device_rn(ieee_addr: str, endpoint: int) -> str:
 def _device_target_uri(ae_path: str, ieee_addr: str, endpoint: int) -> str:
     return f"{ae_path}/{_device_rn(ieee_addr, endpoint)}"
 
-
-# ---------------------------------------------------------------------------
-# Device resource tree: one parent DeviceClass flexContainer per device, one
-# child flexContainer per supported ModuleClass, each with its own
-# <subscription>. cnd/shortName verified against the real SDT XML/CSV.
-# ---------------------------------------------------------------------------
 def _device_shortname(device_class: str) -> str:
     return f"{sdt_loader.DOMAIN_PREFIX}:{sdt_loader.SHORT_NAMES[device_class]}"
 
@@ -345,43 +271,25 @@ class Translator:
         self._downlink_queue = downlink_queue
 
         self._pending: dict[str, asyncio.Future[dict]] = {}
-        self._last_online_status: dict[str, bool] = {}  # dedup cache for _report_online_status()
-        self._permit_join_active = False  # True while a permit-join window is open
-        self._pending_color_xy: dict[str, dict[str, object]] = {}  # buffer for _accumulate_color_xy()
-        self._pending_rgb: dict[str, dict[str, object]] = {}  # buffer for _accumulate_rgb()
-        # ieee_addr -> Future resolved by _handle_zcl_report() on a matching
-        # Color Control report -- lets _verify_colour_applied() distinguish
-        # "confirmed" from "nothing arrived" without blocking.
+        self._last_online_status: dict[str, bool] = {}
+        self._permit_join_active = False
+        self._pending_color_xy: dict[str, dict[str, object]] = {}
+        self._pending_rgb: dict[str, dict[str, object]] = {}
         self._pending_colour_report: dict[str, "asyncio.Future[None]"] = {}
-        # Last-known real brightness percent per device (kept even while
-        # off, since move_to_level_with_on_off's level=0 doesn't touch
-        # CurrentLevel) -- see _effective_brightness().
         self._device_brightness: dict[str, int] = {}
-        self._device_on: dict[str, bool] = {}  # last-known on/off per device
-        # Module URI -> count of our own UPDATEs not yet echoed back --
-        # a counter, not a set, since two independent cascades (downlink +
-        # uplink) can each publish to the same URI at once. See
-        # _handle_notification().
+        self._device_on: dict[str, bool] = {}
         self._pending_self_update: dict[str, int] = {}
-        # Last confirmed-real value per CSE field per device -- what a
-        # failed downlink command reverts back to. See _revert_fields().
         self._last_known_fields: dict[str, dict[str, object]] = {}
-        self._device_profiles: dict[str, DeviceProfile] = {}  # per-device SDT classification
+        self._device_profiles: dict[str, DeviceProfile] = {}
 
         self._ae_path = f"{cfg.onem2m.cse_base}/{cfg.onem2m.ae_name}"
         self._control_uri = f"{self._ae_path}/{cfg.onem2m.control_rn}"
-        self._poa = f"mqtt://{cfg.mqtt.broker_host}:{cfg.mqtt.broker_port}"  # this AE's advertised endpoint
-        self._ae_id: Optional[str] = None  # set by _ensure_ae() during bootstrap
+        self._poa = f"mqtt://{cfg.mqtt.broker_host}:{cfg.mqtt.broker_port}"
+        self._ae_id: Optional[str] = None
 
     def _notify_target(self) -> str:
-        """nu (notificationURI) for every subscription -- must spell out the
-        full topic ourselves (real TinyIoT appends `nu`'s path verbatim onto
-        the Notify topic, no defaulting of its own)."""
         return f"{self._poa}/{self._ae_id}/json"
 
-    # ------------------------------------------------------------------
-    # oneM2M request/response (rqi correlation lives here, not in OneM2MClient)
-    # ------------------------------------------------------------------
     async def request(
         self,
         op: int,
@@ -431,9 +339,6 @@ class Translator:
             raise OneM2MError(resp.get("rsc"), resp.get("pc"))
         return resp
 
-    # ------------------------------------------------------------------
-    # Bootstrap (one-time startup sequence, called from main.py)
-    # ------------------------------------------------------------------
     async def bootstrap(self) -> None:
         acp_path = await self._ensure_acp()
         await self._ensure_ae(acp_path)
@@ -496,9 +401,6 @@ class Translator:
     async def _ensure_subscription(
         self, target_uri: str, sub_rn: str, net: list[int], nct: int = 1
     ) -> None:
-        """RETRIEVE-or-CREATE a <subscription> under `target_uri`, self-healing
-        a stale `nu` (nu's format changed a few times during development,
-        and this is called on every restart, not just first-time creation)."""
         sub_uri = f"{target_uri}/{sub_rn}"
         nu = [self._notify_target()]
         resp = await self.request(int(Operation.RETRIEVE), to=sub_uri, fr=self._ae_id)
@@ -521,8 +423,6 @@ class Translator:
         logger.info("Created subscription %s", sub_uri)
 
     async def _ensure_control_resource(self) -> None:
-        """Plain CNT (not flexContainer) + subscription -- control signals
-        are child CIN creations (enc.net=[3]), not a typed-attribute UPDATE."""
         resp = await self.request(int(Operation.RETRIEVE), to=self._control_uri, fr=self._ae_id)
         if resp.get("rsc") != 2000:
             pc = {"m2m:cnt": {"rn": self.cfg.onem2m.control_rn}}
@@ -535,10 +435,6 @@ class Translator:
         await self._ensure_subscription(self._control_uri, f"sub_{self.cfg.onem2m.control_rn}", net=[3])
 
     async def _sync_devices_from_nvm(self) -> None:
-        """Bootstrap sweep over zigpy's own NVM device table: refreshes
-        already-registered devices with current real values, and registers
-        (via _register_new_device()) any NVM-paired device missing from
-        the CSE. No local cache to reconcile -- target URIs are deterministic."""
         try:
             nvm_devices = await self.zigbee.discover_paired_devices()
         except ConnectionError:
@@ -598,8 +494,6 @@ class Translator:
                     converted = convert(value)
                     fields[name] = converted
                     if name == "state":
-                        # Warms self._device_on before brightness/colour are
-                        # read (binarySwitch processed first, alphabetically).
                         self._device_on[ieee_addr] = bool(converted)
                     elif name == "brightness":
                         self._device_brightness[ieee_addr] = converted  # real level, kept regardless of on/off
@@ -615,10 +509,6 @@ class Translator:
         return self._device_brightness.get(ieee_addr, 100)
 
     def _accumulate_color_xy(self, ieee_addr: str, values: dict[str, object]) -> Optional[dict[str, object]]:
-        """current_x/current_y arrive independently -- buffer whichever
-        coordinate just arrived and only convert to RGB once both are known.
-        `values` can be {} to just recompute RGB off an updated brightness
-        without touching the xy buffer (see call sites)."""
         buf = self._pending_color_xy.setdefault(ieee_addr, {})
         buf.update({k: v for k, v in values.items() if k in _COLOR_XY_ATTRS})
         if "current_x" not in buf or "current_y" not in buf:
@@ -647,19 +537,6 @@ class Translator:
         self._publish_fields_by_module(ieee_addr, endpoint, fields, log_verb="Refreshed")
 
     async def _resync_device(self, ieee_addr: str, endpoint: int) -> None:
-        """Device just came back online -- re-reads and republishes
-        everything rather than trusting organic reports alone to catch the
-        CSE back up. Always run via asyncio.create_task(), never awaited inline.
-
-        Also the only place that re-verifies the device's CSE resource tree
-        still exists: zigpy fires no event for an already-known device's
-        rejoin, so this offline->online transition (from either a report or
-        healthcheck) is the one recurring, already-throttled hook available.
-        One RETRIEVE on the parent decides: if missing, hand off to
-        _register_new_device() (already RETRIEVE-before-CREATE per
-        module/subscription, so a partial tree heals too); if present, the
-        common case, just do the normal read-and-republish.
-        """
         profile = self._device_profiles.get(ieee_addr)
         if profile is None:
             return
@@ -686,9 +563,6 @@ class Translator:
     def _publish_fields_by_module(
         self, ieee_addr: str, endpoint: int, fields: dict[str, object], *, log_verb: str
     ) -> None:
-        """Split `fields` by module (_MODULE_BY_FIELD) and UPDATE each
-        module resource separately -- one combined UPDATE isn't possible
-        since each module is its own CSE resource."""
         by_module: dict[str, dict[str, object]] = {}
         for field, value in fields.items():
             module = _MODULE_BY_FIELD.get(field)
@@ -721,10 +595,6 @@ class Translator:
                 logger.exception("Failed to publish %s update for %s", log_verb.lower(), target_uri)
 
     async def _report_online_status(self, ieee_addr: str, endpoint: int, online: bool) -> None:
-        """Push `online` to faultDetection's status (inverted), but only if
-        it changed since last reported -- else healthcheck would re-publish
-        every device every interval regardless. No self-echo bookkeeping
-        needed -- status is read-only, so it has no subscription to loop back on."""
         if self._last_online_status.get(ieee_addr) == online:
             return
         profile = self._device_profiles.get(ieee_addr)
@@ -776,8 +646,6 @@ class Translator:
                 future.set_result(payload)
             return
 
-        # Real TinyIoT publishes the bare {"m2m:sgn": {...}} body directly,
-        # no req envelope -- op==NOTIFY kept as a fallback for a spec-wrapped CSE.
         if "m2m:sgn" in payload or payload.get("op") == int(Operation.NOTIFY):
             logger.debug("Notify on %s: %s", item["topic"], payload)
             await self._handle_notification(payload)
@@ -789,21 +657,17 @@ class Translator:
         req_to = payload.get("to", self._ae_id)     # this AE (receiver)
         rqi = payload.get("rqi", uuid.uuid4().hex)
 
-        # See _process_downlink_item() -- real TinyIoT's Notify has
-        # "m2m:sgn" at the top level, not nested under "pc". Accept either.
         sgn = payload.get("m2m:sgn") or (payload.get("pc") or {}).get("m2m:sgn") or {}
         nev = sgn.get("nev", {}) if isinstance(sgn, dict) else {}
         rep = nev.get("rep", {}) if isinstance(nev, dict) else {}
         net = nev.get("net") if isinstance(nev, dict) else None
         sur = sgn.get("sur", "") if isinstance(sgn, dict) else ""
 
-        # `sur` addresses the <subscription>; its parent is the actual target resource.
         target_uri = sur.rstrip("/").rsplit("/", 1)[0] if sur else ""
         if not target_uri:
             logger.warning("Downlink notification missing subscription reference, ignoring")
             return
 
-        # No Blocking Update to hold this pending -- ack right away regardless of outcome.
         ack = {"rqi": rqi, "fr": req_to, "to": req_fr, "rsc": 2000}
         try:
             self.onem2m.publish(resp_topic(req_fr, req_to), json.dumps(ack))
@@ -816,11 +680,7 @@ class Translator:
 
         if net != NET_UPDATE:
             return
-
-        # target_uri also gets hit by our own uplink reports -- recognizing
-        # and dropping our own just-sent update here breaks what would
-        # otherwise be an infinite dispatch loop. See __init__'s
-        # self._pending_self_update docstring for why this is a counter, not a set.
+        
         pending = self._pending_self_update.get(target_uri, 0)
         if pending > 0:
             if pending > 1:
@@ -843,14 +703,6 @@ class Translator:
         await self._dispatch_downlink_commands(ieee_addr, endpoint, module_name, rep)
 
     async def _handle_control_notification(self, rep: dict) -> None:
-        """`rep` is the newly created cnt_control CIN; `con` is expected to
-        be {"cmd": "permitJoin"} or {"cmd": "removeDevice", "ieee": "..."}.
-        removeDevice is the only CSE-driven unpair path -- a CSE-side
-        resource DELETE is invisible to us on purpose (see
-        _handle_notification()), so this instead kicks the device off the
-        radio and cleans up the CSE side ourselves, mirroring
-        _handle_leave_indication()/_deregister_device().
-        """
         con = _extract_cin_con(rep)
         cmd = con.get("cmd") if isinstance(con, dict) else con
 
@@ -879,7 +731,6 @@ class Translator:
             self._permit_join_active = False
             return
 
-        # Not awaited inline -- would block run_downlink_consumer for the whole window.
         asyncio.create_task(self._reset_permit_join_after(duration), name="permit_join_reset")
 
     async def _reset_permit_join_after(self, duration_sec: int) -> None:
@@ -888,8 +739,6 @@ class Translator:
         self._permit_join_active = False
 
     async def _handle_remove_device_command(self, ieee_raw: Optional[str]) -> None:
-        """cnt_control's removeDevice command -- endpoint hardcoded to 1,
-        same as everywhere else (multi-endpoint devices aren't supported yet)."""
         ieee_addr = _normalize_ieee(ieee_raw) if ieee_raw else None
         if ieee_addr is None:
             logger.warning("removeDevice command missing/malformed ieee: %r", ieee_raw)
@@ -909,13 +758,6 @@ class Translator:
     async def _dispatch_downlink_commands(
         self, ieee_addr: str, endpoint: int, module_name: str, rep: dict
     ) -> bool:
-        """Returns whether every dispatched command succeeded (informational
-        only now -- a failed command corrects the CSE back itself, see
-        _revert_fields()). state/brightness/colour each cascade into more
-        than their own field/command (see their own methods below) and are
-        dispatched by field name alone; the generic DOWNLINK_ATTR_MAP branch
-        needs `module_name` too since a bare field name isn't unique across ModuleClasses.
-        """
         ok = True
         for body in rep.values() if isinstance(rep, dict) else []:
             if not isinstance(body, dict):
@@ -949,10 +791,6 @@ class Translator:
         attr_name: str,
         convert: Callable[[object], object],
     ) -> bool:
-        """One CSE field -> one ZCL command (state/on-off is the only field
-        this simple left -- brightness/colour have their own methods).
-        `convert` scales the raw CSE value into whatever unit send_command()'s
-        underlying ZCL call needs."""
         try:
             # Bounded explicitly -- an unbounded hang here would stall every
             # other item on downlink_queue, not just this device's command.
@@ -969,16 +807,12 @@ class Translator:
             return False
 
     async def _revert_fields(self, ieee_addr: str, endpoint: int, fields: tuple[str, ...]) -> None:
-        """Corrects the CSE's optimistically-committed value(s) back to the
-        last confirmed-real state after a downlink command fails to apply."""
         known = self._last_known_fields.get(ieee_addr, {})
         revert = {field: known[field] for field in fields if field in known}
         if revert:
             self._publish_fields_by_module(ieee_addr, endpoint, revert, log_verb="Reverted")
 
     async def _apply_state_downlink(self, ieee_addr: str, endpoint: int, value: object) -> bool:
-        """CSE-requested on/off write: dispatches on()/off(), then
-        republishes brightness/colour to match via _effective_brightness()."""
         cluster_id, attr_name, convert = DOWNLINK_ATTR_MAP[("binarySwitch", "state")]
         success = await self._apply_simple_downlink(ieee_addr, endpoint, "state", value, cluster_id, attr_name, convert)
         if not success:
@@ -992,9 +826,6 @@ class Translator:
         return True
 
     async def _apply_brightness_downlink(self, ieee_addr: str, endpoint: int, value: object) -> bool:
-        """CSE-requested brightness write via move_to_level_with_on_off --
-        0 turns the device off, nonzero turns it on if needed, keeping
-        state/brightness/colour in sync via _effective_brightness()."""
         cluster_id, attr_name, convert = DOWNLINK_ATTR_MAP[("brightness", "brightness")]
         success = await self._apply_simple_downlink(
             ieee_addr, endpoint, "brightness", value, cluster_id, attr_name, convert
@@ -1014,11 +845,6 @@ class Translator:
         return True
 
     async def _apply_rgb_downlink(self, ieee_addr: str, endpoint: int, field: str, value: object) -> bool:
-        """CSE-requested RGB write: buffers red/green/blue until complete,
-        converts to xy + brightness (rgb_to_xy()'s Y term), and sends both
-        move_to_color and move_to_level_with_on_off. Pure black resolves to
-        the D65 white point + brightness=0, meaning "turn off" -- no special-casing needed.
-        """
         rgb = self._accumulate_rgb(ieee_addr, field, value)
         if rgb is None:
             return True
@@ -1055,17 +881,10 @@ class Translator:
         fields = {"brightness": self._effective_brightness(ieee_addr), "state": on}
         self._publish_fields_by_module(ieee_addr, endpoint, fields, log_verb="Derived")
         if on:
-            # xy just sent is only a prediction -- the device's real gamut
-            # may clamp it; _verify_colour_applied() confirms/corrects, backgrounded.
             asyncio.create_task(self._verify_colour_applied(ieee_addr, endpoint), name=f"colour_verify_{ieee_addr}")
         return True
 
     async def _verify_colour_applied(self, ieee_addr: str, endpoint: int) -> None:
-        """Waits briefly for the device's own report to confirm a colour
-        command (not every device proactively reports one); on timeout,
-        actively reads current_x/current_y back instead of leaving the CSE
-        holding an unconfirmed prediction. Always run via asyncio.create_task().
-        """
         loop = asyncio.get_running_loop()
         future: "asyncio.Future[None]" = loop.create_future()
         self._pending_colour_report[ieee_addr] = future
@@ -1103,8 +922,6 @@ class Translator:
                 self._uplink_queue.task_done()
 
     async def _handle_zcl_report(self, frame: UplinkFrame) -> None:
-        # Always an already-decoded, unsolicited report -- join/leave/init
-        # events bypass this queue entirely (see zigbee_handler.py).
         ieee_addr = frame.get("ieee_addr", "")
         cluster = frame.get("cluster")
         endpoint = frame.get("endpoint") or 1
@@ -1116,17 +933,12 @@ class Translator:
             logger.warning("Uplink from unpaired device %s, ignoring (join first)", ieee_addr)
             return
 
-        # zigpy fires no event for an already-known device's rejoin, so a
-        # report is the earliest reliable "it's alive" signal we get.
         was_offline = self._last_online_status.get(ieee_addr) is False
         await self._report_online_status(ieee_addr, endpoint, online=True)
         if was_offline:
-            # This report only proves liveness, not that every CSE field is
-            # still correct -- see _resync_device().
             asyncio.create_task(self._resync_device(ieee_addr, endpoint), name=f"resync_{ieee_addr}")
 
         if cluster == COLOR_CLUSTER and attribute in _COLOR_XY_ATTRS:
-            # Wake _verify_colour_applied() if it's waiting on this device.
             pending_colour = self._pending_colour_report.get(ieee_addr)
             if pending_colour is not None and not pending_colour.done():
                 pending_colour.set_result(None)
@@ -1135,16 +947,12 @@ class Translator:
             target = ATTR_NAME_MAP.get((cluster, attribute))
             fields = {target[0]: target[1](frame.get("value"))} if target is not None else None
             if fields and "state" in fields:
-                # On/Off report -- brightness/colour must follow (0/black
-                # while off, real remembered value once on).
                 self._device_on[ieee_addr] = fields["state"]
                 fields["brightness"] = self._effective_brightness(ieee_addr)
                 rgb_fields = self._accumulate_color_xy(ieee_addr, {})
                 if rgb_fields:
                     fields.update(rgb_fields)
             elif fields and "brightness" in fields:
-                # Level Control report -- TS-0023's colour (RGB) bakes in
-                # brightness, so it needs recomputing too, not just brightness itself.
                 self._device_brightness[ieee_addr] = fields["brightness"]
                 fields["brightness"] = self._effective_brightness(ieee_addr)
                 rgb_fields = self._accumulate_color_xy(ieee_addr, {})
@@ -1155,14 +963,11 @@ class Translator:
         self._publish_fields_by_module(ieee_addr, endpoint, fields, log_verb="Uplink")
 
     async def _handle_leave_indication(self, ieee_addr: str) -> None:
-        """A genuine Zigbee network-leave (unpair), distinct from merely offline/unreachable."""
         if not self.zigbee.is_paired(ieee_addr):
             return
         await self._deregister_device(ieee_addr, endpoint=1, reason="left the network")
 
     async def _deregister_device(self, ieee_addr: str, endpoint: int, reason: str) -> None:
-        """Deletes the device's parent flexContainer (cascades down through
-        every module + subscription) and clears local caches."""
         target_uri = _device_target_uri(self._ae_path, ieee_addr, endpoint)
         try:
             await self.request_ok(
@@ -1191,9 +996,6 @@ class Translator:
     # Health check: actively push online/offline for every paired device
     # ------------------------------------------------------------------
     async def run_healthcheck(self) -> None:
-        """Periodic sweep recomputing each device's liveness from zigpy's
-        own last_seen timestamp, reported via _report_online_status()
-        (which dedups against self._last_online_status)."""
         interval = self.cfg.healthcheck.interval_sec
         threshold_sec = self.cfg.healthcheck.offline_threshold_sec
         while True:
@@ -1217,13 +1019,7 @@ class Translator:
                     asyncio.create_task(self._resync_device(ieee_addr, endpoint), name=f"resync_{ieee_addr}")
 
     # ------------------------------------------------------------------
-    # Pairing Manager: device registration. zigpy runs its own full
-    # interview automatically (Device.schedule_initialize()); this is
-    # ZigbeeHandler's on_device_ready callback, spawned off
-    # device_initialized/device_init_failure (not device_joined, which
-    # fires before that interview even starts). Also the exact function
-    # _sync_devices_from_nvm() calls for a bootstrap-orphaned device, so a
-    # live join and a recovered device register identically.
+    # Pairing Manager
     # ------------------------------------------------------------------
     async def _classify_device_confirmed(self, ieee_addr: str, endpoint: int) -> Optional[DeviceProfile]:
         """_classify_device() from cluster list + device_type, then -- if
@@ -1245,10 +1041,6 @@ class Translator:
         )
 
     async def _confirm_colour_support(self, ieee_addr: str, endpoint: int) -> bool:
-        """Color Control also covers Hue/Sat-only and CT-only bulbs,
-        distinguished only by the color_capabilities bitmap. This gateway
-        only implements XY/RGB, so a device without the XY bit gets no
-        colour resource created at all."""
         try:
             values = await asyncio.wait_for(
                 self.zigbee.read_attributes(ieee_addr, endpoint, COLOR_CLUSTER, ["color_capabilities"]),
@@ -1306,12 +1098,6 @@ class Translator:
         online: bool = False,
         fields: Optional[dict[str, object]] = None,
     ) -> None:
-        """Creates the parent DeviceClass flexContainer plus one child per
-        supported ModuleClass, populated with known values or
-        _MODULE_DEFAULTS. `online` has nowhere else to go but
-        faultDetection's status (no ZCL cluster backs it). RETRIEVE-before-
-        CREATE on everything, so a retry after a partial failure picks up
-        exactly where it stopped instead of re-CREATEing and erroring out."""
         fields = dict(fields or {})
         if FAULT_DETECTION_MODULE in profile.modules:
             fields["status"] = not online
@@ -1350,11 +1136,6 @@ class Translator:
             )
 
     async def _create_device_subscription(self, ieee_addr: str, endpoint: int, profile: DeviceProfile) -> None:
-        """net=[NET_UPDATE]/nct=1 per writable module (faultDetection is
-        read-only, no subscription). nct=1, not nct=2 -- confirmed against
-        real TinyIoT that nct=2 only reports generic metadata, never our
-        actual field value. Also called from _sync_devices_from_nvm() to
-        heal a stale `nu` on every restart, not just first registration."""
         device_uri = _device_target_uri(self._ae_path, ieee_addr, endpoint)
         for module in profile.modules:
             if module == FAULT_DETECTION_MODULE:

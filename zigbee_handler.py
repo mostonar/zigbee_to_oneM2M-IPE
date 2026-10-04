@@ -1,14 +1,3 @@
-"""Lower Driver Layer: Zigbee radio transport, backed by zigpy + bellows.
-
-Never decides what a ZCL attribute *means* to the CSE (that's
-translator.py's job) -- just pushes/pulls already-decoded zigpy values.
-Downlink values arrive here already unit-converted; this module only picks
-*which* zigpy command to call for a given attribute.
-
-Chipset abstraction is delegated to zigpy's `ControllerApplication`
-(`bellows` backend here, for Silicon Labs EFR32 dongles).
-"""
-
 from __future__ import annotations
 
 import asyncio
@@ -28,10 +17,6 @@ DeviceEventCallback = Callable[[str], Awaitable[None]]
 
 
 def rgb_to_xy(r: int, g: int, b: int) -> tuple[float, float, float]:
-    """8-bit sRGB -> CIE 1931 (x, y, Y) via Wide RGB D65. Y (relative
-    luminance) doubles as this RGB's brightness reading, since ZCL splits
-    luminance (Level Control) from chromaticity (Color Control's xy).
-    """
     def gamma(c: int) -> float:
         v = c / 255.0
         return ((v + 0.055) / 1.055) ** 2.4 if v > 0.04045 else v / 12.92
@@ -49,8 +34,6 @@ def rgb_to_xy(r: int, g: int, b: int) -> tuple[float, float, float]:
 
 
 def xy_to_rgb(x: float, y: float, brightness: float = 1.0) -> tuple[int, int, int]:
-    """Inverse of rgb_to_xy() -- xy (+ an assumed brightness, since a Color
-    cluster report carries no luminance of its own) back to 8-bit sRGB."""
     if y <= 0:
         return 0, 0, 0
     cap_y = brightness
@@ -78,10 +61,6 @@ ZCL_LEVEL_MAX = 254  # CurrentLevel practical max (0xFE)
 
 
 def level_to_percent(level: int) -> int:
-    """ZCL CurrentLevel (0/1-254) -> percent (0/1-100). 0 is its own special
-    value both sides now -- move_to_level_with_on_off's level=0 really turns
-    the device off without touching CurrentLevel, confirmed on real hardware.
-    """
     if level <= 0:
         return 0
     clamped = min(ZCL_LEVEL_MAX, level)
@@ -97,9 +76,6 @@ def percent_to_level(percent: int) -> int:
 
 
 class UplinkFrame(TypedDict, total=False):
-    """Item shape pushed onto `uplink_queue` -- an already zigpy-decoded
-    unsolicited attribute report. Join/leave/init events bypass the queue."""
-
     ieee_addr: str
     endpoint: int
     cluster: int
@@ -108,14 +84,6 @@ class UplinkFrame(TypedDict, total=False):
 
 
 class _ZigpyEventListener:
-    """Passed to ControllerApplication.add_listener(); zigpy calls back by
-    method name (zigpy.util.ListenableMixin), so only events we care about
-    need implementing.
-
-    Registers off device_initialized/device_init_failure, not
-    device_joined -- device_joined fires before zigpy's own interview
-    traffic finishes, which would race our own reads against it.
-    """
 
     def __init__(
         self,
@@ -148,8 +116,6 @@ class _ZigpyEventListener:
         asyncio.create_task(self._on_device_leave(str(device.ieee)), name=f"leave_{device.ieee}")
 
     def on_attribute_reported(self, event: AttributeReportedEvent) -> None:
-        """Registered per-cluster in watch_device(), not add_listener() --
-        Cluster objects emit their own typed events separately."""
         self._put({
             "ieee_addr": event.device_ieee,
             "endpoint": event.endpoint_id,
@@ -169,8 +135,6 @@ class ZigbeeHandler:
         self._listener: Optional[_ZigpyEventListener] = None
 
     async def connect(self) -> None:
-        """Start the EZSP radio. Raises ConnectionError on failure. Doesn't
-        register the event listener yet -- see start_listening()."""
         if self._cfg.use_tcp:
             # bellows' native tcp:// scheme -- untested against real TCP hardware.
             device_path = f"tcp://{self._cfg.tcp_host}:{self._cfg.tcp_port}"
@@ -198,8 +162,6 @@ class ZigbeeHandler:
         )
 
     def start_listening(self, on_device_ready: DeviceEventCallback, on_device_leave: DeviceEventCallback) -> None:
-        """Attach the event listener once the Translator's callbacks exist.
-        Must run before permit-join is ever opened."""
         assert self._app is not None
         self._listener = _ZigpyEventListener(
             self._uplink_queue, self._cfg.uplink_queue_maxsize, on_device_ready, on_device_leave
@@ -207,9 +169,6 @@ class ZigbeeHandler:
         self._app.add_listener(self._listener)
 
     async def discover_paired_devices(self) -> list[dict]:
-        """Coordinator NVM's paired device list (excluding the coordinator
-        itself). `last_seen` is zigpy's own liveness timestamp, persisted
-        to zigpy.db -- no local tracking needed."""
         assert self._app is not None
         coordinator_ieee = self._app.state.node_info.ieee
         return [
@@ -224,7 +183,6 @@ class ZigbeeHandler:
         ]
 
     def is_paired(self, ieee_addr: str) -> bool:
-        """Synchronous, in-memory check against zigpy's own device table -- no I/O."""
         assert self._app is not None
         try:
             device = self._app.get_device(ieee=t.EUI64.convert(ieee_addr))
@@ -233,8 +191,6 @@ class ZigbeeHandler:
         return device.ieee != self._app.state.node_info.ieee
 
     def get_device_clusters(self, ieee_addr: str, endpoint: int) -> set[int]:
-        """ZCL cluster IDs this endpoint supports, per zigpy's own interview
-        (no I/O). Used for SDT classification; empty set if unknown."""
         assert self._app is not None
         try:
             device = self._app.get_device(ieee=t.EUI64.convert(ieee_addr))
@@ -246,9 +202,6 @@ class ZigbeeHandler:
         return set(ep.in_clusters.keys())
 
     def get_device_type(self, ieee_addr: str, endpoint: int) -> tuple[Optional[int], Optional[int]]:
-        """(profile_id, device_type) from this endpoint's Simple Descriptor
-        (no I/O). device_type's meaning depends on profile_id -- callers
-        must check it (see translator._classify_device())."""
         assert self._app is not None
         try:
             device = self._app.get_device(ieee=t.EUI64.convert(ieee_addr))
@@ -275,9 +228,6 @@ class ZigbeeHandler:
         return cluster
 
     def watch_device(self, ieee_addr: str, endpoint: int, cluster_ids: list[int]) -> None:
-        """Subscribe to zigpy's decoded attribute-report events for these
-        clusters, forwarding into uplink_queue. In-memory only -- must be
-        re-called on every process restart for already-paired devices."""
         assert self._listener is not None
         for cluster_id in cluster_ids:
             try:
@@ -289,10 +239,6 @@ class ZigbeeHandler:
     async def read_attributes(
         self, ieee_addr: str, endpoint: int, cluster_id: int, attr_names: list[str]
     ) -> dict[str, object]:
-        """Read Attributes via zigpy's Cluster API (already ZCL-decoded).
-        Returns {} if this device simply lacks the cluster (not an error);
-        raises ConnectionError if a cluster that exists doesn't answer.
-        """
         try:
             cluster = self._get_cluster(ieee_addr, endpoint, cluster_id)
         except ConnectionError:
@@ -306,20 +252,11 @@ class ZigbeeHandler:
     async def send_command(
         self, ieee_addr: str, endpoint: int, cluster_id: int, attr_name: str, value: object
     ) -> None:
-        """Picks *which* zigpy command controls `attr_name` (neither on_off
-        nor current_level are ZCL-writable directly). `value` must already
-        be unit-converted (bool / 0-254 int) -- translator.py owns that
-        conversion now, not this function. Multi-field commands (color)
-        don't fit this shape -- see set_color_rgb().
-        """
         cluster = self._get_cluster(ieee_addr, endpoint, cluster_id)
         try:
             if attr_name == "on_off":
                 await (cluster.on() if value else cluster.off())
             elif attr_name == "current_level":
-                # _with_on_off, not plain move_to_level -- level=0 here
-                # really turns the device off without touching CurrentLevel
-                # (confirmed on real hardware), keeping state/brightness in sync.
                 await cluster.move_to_level_with_on_off(int(value), 0)  # type: ignore[arg-type]
             else:
                 raise ValueError(f"No downlink command known for attribute {attr_name!r}")
@@ -347,12 +284,6 @@ class ZigbeeHandler:
             raise ConnectionError(f"Zigbee permit-join failed: {exc}") from exc
 
     async def remove_device(self, ieee_addr: str) -> None:
-        """Forcibly kicks a device off the network (CSE-driven unpair).
-        remove_children=True drops its end-device children too;
-        rejoin=False blocks a silent auto-rejoin. Fires zigpy's
-        `device_removed`, not `device_left` -- caller must clean up the
-        CSE side itself.
-        """
         assert self._app is not None
         try:
             await self._app.remove(t.EUI64.convert(ieee_addr), remove_children=True, rejoin=False)

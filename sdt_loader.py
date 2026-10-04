@@ -1,9 +1,3 @@
-"""Loads oneM2M TS-0023 SDT definitions (DeviceClasses/ModuleClasses/
-DataPoints/shortNames) from the XML/CSV files under SDT/. Zigbee<->SDT
-mapping (cluster<->ModuleClass, the "cod" domain prefix) is NOT here --
-SDT itself doesn't know Zigbee exists -- see translator.py instead.
-"""
-
 from __future__ import annotations
 
 import csv
@@ -15,8 +9,6 @@ _NS = {"sdt": "http://www.onem2m.org/xml/sdt/4.0"}
 
 
 def _load_short_names() -> dict[str, str]:
-    """name -> shortName, for every DeviceClass/ModuleClass/DataPoint the
-    spec defines (SDT-TS0023 clause 6.3)."""
     path = _SDT_DIR / "shortname.csv"
     names: dict[str, str] = {}
     with path.open("r", encoding="utf-8-sig", newline="") as f:
@@ -47,8 +39,6 @@ def _load_module_class_datapoints() -> dict[str, list[str]]:
 
 
 def _load_device_classes() -> dict[str, list[tuple[str, bool]]]:
-    """DeviceClass name -> list of (ModuleClass name, required) it can hold,
-    `required` being minOccurs >= 1."""
     tree = ET.parse(_SDT_DIR / "SDT-TS0023-Devices-Common.XML")
     device_classes = tree.getroot().find("sdt:DeviceClasses", _NS)
     result: dict[str, list[tuple[str, bool]]] = {}
@@ -75,6 +65,4 @@ SHORT_NAMES: dict[str, str] = _load_short_names()
 MODULE_CLASS_DATAPOINTS: dict[str, list[str]] = _load_module_class_datapoints()
 DEVICE_CLASSES: dict[str, list[tuple[str, bool]]] = _load_device_classes()
 
-# Not in any shipped file -- verified against the spec that our classes are
-# all under the Common domain, so "cod" is correct here.
 DOMAIN_PREFIX = "cod"

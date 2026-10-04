@@ -1,15 +1,3 @@
-"""Lower Network Layer: oneM2M Mca-over-MQTT transport.
-
-Pure transport, no JSON parsing: publishes pre-built request/response
-strings, and hands every inbound (topic, text) pair to Translator via
-downlink_queue -- deciding req vs. notification is Translator's job.
-
-paho-mqtt runs its network loop on a background thread; callbacks hop back
-onto the event loop via call_soon_threadsafe.
-
-Topic format (TS-0010): /oneM2M/req/{originator}/{receiver}/json
-"""
-
 from __future__ import annotations
 
 import asyncio
@@ -29,17 +17,14 @@ class DownlinkItem(TypedDict):
 
 
 def req_topic(originator: str, receiver: str) -> str:
-    """Topic a request from `originator` to `receiver` is published on."""
     return f"/oneM2M/req/{originator}/{receiver}/json"
 
 
 def resp_topic(originator: str, receiver: str) -> str:
-    """Topic the response to a (originator, receiver) request is published on."""
     return f"/oneM2M/resp/{originator}/{receiver}/json"
 
 
 def reg_req_topic(credential_id: str, receiver: str) -> str:
-    """TS-0010 6.4.4: request topic before we have an AE-ID/CSE-ID yet."""
     return f"/oneM2M/reg_req/{credential_id}/{receiver}/json"
 
 
@@ -48,7 +33,6 @@ def reg_resp_topic(credential_id: str, receiver: str) -> str:
 
 
 class OneM2MClient:
-    """Async wrapper around paho-mqtt. Pure transport -- no JSON awareness."""
 
     def __init__(
         self,
@@ -120,8 +104,6 @@ class OneM2MClient:
         rc = reason_code.value if reason_code is not None else 0  # paho 2.x hands a ReasonCode, not an int
         self._connect_error = rc if rc != 0 else None
         if rc == 0 and self._subscribed_topics:
-            # paho's auto-reconnect never re-sends prior SUBSCRIBEs itself --
-            # without this, a network blip leaves us silently deaf to Notifies.
             for topic in self._subscribed_topics:
                 self._client.subscribe(topic, qos=1)
             logger.info("Re-subscribed to %d topic(s) after (re)connect", len(self._subscribed_topics))

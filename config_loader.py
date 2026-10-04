@@ -1,10 +1,3 @@
-"""Typed configuration loading for the IPE gateway.
-
-Reads config.yaml and validates it into Pydantic models so every other
-module gets typing-safe, attribute-style access to configuration constants
-instead of raw dicts (`cfg.mqtt.broker_host` vs. `cfg["mqtt"]["broker_host"]`).
-"""
-
 from __future__ import annotations
 
 from functools import lru_cache
