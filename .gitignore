@@ -1,1 +1,3 @@
 /zigpy.db
+__pycache__/
+*.pyc

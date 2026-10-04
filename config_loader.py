@@ -48,6 +48,7 @@ class SerialConfig(BaseModel):
     tcp_host: str = "127.0.0.1"
     tcp_port: int = 6638
     reconnect_delay_sec: float = 5.0
+    radio_connect_timeout_sec: float = 40.0  # NCP reset + EZSP negotiation can take 10-30s
     uplink_queue_maxsize: int = 500
     database_path: str = "zigpy.db"  # zigpy's own network/device state persistence (NVM backup)
     flow_control: Optional[str] = None  # None confirmed correct for a real Sonoff ZBDongle-E
