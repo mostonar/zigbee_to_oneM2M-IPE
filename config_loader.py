@@ -41,6 +41,7 @@ class MqttConfig(BaseModel):
 
 
 class SerialConfig(BaseModel):
+    radio_type: str = "ezsp"  # zigpy radio library -- see zigbee_handler._RADIO_MODULES
     use_tcp: bool = False
     port: str = "COM3"
     baudrate: int = 115200

@@ -23,6 +23,7 @@ mqtt:
   downlink_queue_maxsize: 500
 
 serial:
+  radio_type: "ezsp"
   use_tcp: false
   port: "COM4"
   baudrate: 115200

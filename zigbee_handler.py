@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import asyncio
+import importlib
 import logging
 from typing import Awaitable, Callable, Optional, TypedDict
 
 import zigpy.types as t
-from bellows.zigbee.application import ControllerApplication
+from zigpy.application import ControllerApplication
 from zigpy.zcl import AttributeReportedEvent
 from zigpy.zcl.clusters.lighting import Color
 
@@ -14,6 +15,27 @@ from config_loader import SerialConfig
 logger = logging.getLogger(__name__)
 
 DeviceEventCallback = Callable[[str], Awaitable[None]]
+
+_RADIO_MODULES: dict[str, str] = {
+    "ezsp": "bellows.zigbee.application",      # Silicon Labs EFR32
+    "znp": "zigpy_znp.zigbee.application",     # TI Z-Stack (CC2652 etc.)
+    "deconz": "zigpy_deconz.zigbee.application",  # dresden elektronik ConBee/RaspBee
+    "zigate": "zigpy_zigate.zigbee.application",
+    "xbee": "zigpy_xbee.zigbee.application",
+}
+
+
+def _load_controller_class(radio_type: str) -> type[ControllerApplication]:
+    module_path = _RADIO_MODULES.get(radio_type)
+    if module_path is None:
+        raise ConnectionError(f"Unknown radio_type {radio_type!r}, expected one of {sorted(_RADIO_MODULES)}")
+    try:
+        module = importlib.import_module(module_path)
+    except ImportError as exc:
+        raise ConnectionError(
+            f"radio_type {radio_type!r} needs {module_path.split('.')[0]} installed: {exc}"
+        ) from exc
+    return module.ControllerApplication
 
 
 def rgb_to_xy(r: int, g: int, b: int) -> tuple[float, float, float]:
@@ -135,8 +157,9 @@ class ZigbeeHandler:
         self._listener: Optional[_ZigpyEventListener] = None
 
     async def connect(self) -> None:
+        controller_cls = _load_controller_class(self._cfg.radio_type)
         if self._cfg.use_tcp:
-            # bellows' native tcp:// scheme -- untested against real TCP hardware.
+            # tcp:// scheme -- untested against real TCP hardware.
             device_path = f"tcp://{self._cfg.tcp_host}:{self._cfg.tcp_port}"
         else:
             device_path = self._cfg.port
@@ -151,13 +174,13 @@ class ZigbeeHandler:
         }
 
         try:
-            self._app = await ControllerApplication.new(zigpy_config, auto_form=True, start_radio=True)
+            self._app = await controller_cls.new(zigpy_config, auto_form=True, start_radio=True)
         except Exception as exc:  # noqa: BLE001
-            raise ConnectionError(f"Failed to start zigpy/EZSP radio: {exc}") from exc
+            raise ConnectionError(f"Failed to start zigpy/{self._cfg.radio_type} radio: {exc}") from exc
 
         logger.info(
-            "Zigbee radio up on %s, coordinator IEEE=%s PAN=0x%04X channel=%d",
-            device_path, self._app.state.node_info.ieee,
+            "Zigbee %s radio up on %s, coordinator IEEE=%s PAN=0x%04X channel=%d",
+            self._cfg.radio_type, device_path, self._app.state.node_info.ieee,
             self._app.state.network_info.pan_id, self._app.state.network_info.channel,
         )
 
